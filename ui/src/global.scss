@@ -1,0 +1,44 @@
+@import '~normalize.css';
+@import '~material-icons/iconfont/material-icons.scss';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+html {
+  font-size: 62.5%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
+}
+body {
+  // background-color: ffffff00;
+  font-size: 1.4rem;
+  overflow: hidden;
+}
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+main {
+  background-color: #e8e8e8;
+  display: flex;
+  justify-content: space-between;
+
+  height: calc(100vh - 4.6rem);
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  padding-top: 7rem;
+  overflow-y: hidden;
+}
+.scrollable {
+  width: 100%;
+  overflow-y: auto;
+}
+
+.material-icons {
+  font-size: inherit;
+}

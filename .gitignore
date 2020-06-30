@@ -1,0 +1,17 @@
+/scripts
+/database
+
+# dependencies
+/node_modules
+
+# production
+/build
+/dev_build
+
+# misc
+.env
+/.vscode
+/server_template
+/web_template
+/deploy
+/backup
