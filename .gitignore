@@ -15,3 +15,9 @@
 /web_template
 /deploy
 /backup
+client/public/favicon.ico
+client/public/index.html
+client/public/logo192.png
+client/public/logo512.png
+client/public/manifest.json
+client/public/robots.txt
