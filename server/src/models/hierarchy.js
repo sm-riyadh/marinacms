@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const HierarchySchema = new mongoose.Schema([
   {
-    company   : {
+    branch    : {
       type     : mongoose.Schema.ObjectId,
       required : true,
     },
@@ -48,7 +48,7 @@ HierarchySchema.statics.fetch = payload => Hierarchy.findOne({ ...payload })
 
 // CODE: Create
 
-HierarchySchema.statics.create = ({ company, hierarchy }) => Hierarchy({ company, hierarchy }).save()
+HierarchySchema.statics.create = ({ branch, hierarchy }) => Hierarchy({ branch, hierarchy }).save()
 
 // CODE: Replace
 
@@ -61,9 +61,9 @@ HierarchySchema.statics.replace = ({ id, type, hierarchy }) =>
     { upsert: true }
   )
 
-HierarchySchema.statics.insert = ({ company, type, location, accountId }) =>
+HierarchySchema.statics.insert = ({ branch, type, location = 'base', accountId }) =>
   Hierarchy.findOneAndUpdate(
-    { company },
+    { branch },
     {
       $push : { ['hierarchy.' + type + '.' + location]: accountId },
     },

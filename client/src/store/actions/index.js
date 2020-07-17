@@ -1,7 +1,7 @@
 import journalAction from './journal'
 import accountAction from './account'
-import companyAction from './company'
+import branchAction from './branch'
 import hierarchyAction from './hierarchy'
 import settingsAction from './settings'
 
-export { journalAction, accountAction, companyAction, hierarchyAction, settingsAction }
+export { journalAction, accountAction, branchAction, hierarchyAction, settingsAction }

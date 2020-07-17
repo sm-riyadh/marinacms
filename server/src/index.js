@@ -8,7 +8,7 @@ import { host, port } from './config'
 // Routes
 import journal from './routes/journal'
 import account from './routes/account'
-import company from './routes/company'
+import branch from './routes/branch'
 import hierarchy from './routes/hierarchy'
 
 const app = express()
@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 
 app.use(journal)
 app.use(account)
-app.use(company)
+app.use(branch)
 app.use(hierarchy)
 
 // Server Config

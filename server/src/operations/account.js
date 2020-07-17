@@ -1,16 +1,16 @@
 import Account from '../models/account'
-import Company from '../models/company'
+import Branch from '../models/branch'
 import Hierarchy from '../models/hierarchy'
 
 // CODE: Fetch
 
-const fetch = async ({ company, nonempty } = {}) => {
+const fetch = async ({ branch, nonempty } = {}) => {
   let account
 
-  if (nonempty) account = await Account.fetchNonEmpty(company)
-  else account = await Account.fetch(company)
+  if (nonempty) account = await Account.fetchNonEmpty(branch)
+  else account = await Account.fetch(branch)
 
-  // const { balance } = await Company.fetchOne(company)
+  // const { balance } = await Branch.fetchOne(branch)
 
   // const sortedAccount = { balance, ...accountSorter(account) }
 
@@ -25,26 +25,26 @@ const fetchDetails = async ({ id }) => {
 
 //  CODE: Create
 
-const create = async ({ company, type, name, path, location, isFolder, intercompany } = {}) => {
+const create = async ({ branch, type, name, path, location, isFolder, interbranch } = {}) => {
   //  Generate Account Code
-  const { accountCount } = await Company.fetchOne(company)
+  const { accountCount } = await Branch.fetchOne(branch)
 
   const code = codeGen(type, accountCount[type])
 
-  const newAccount = await Account.create({ company, type, name, code, path, isFolder, intercompany })
+  const newAccount = await Account.create({ branch, type, name, code, path, isFolder, interbranch })
 
-  await Hierarchy.insert({ company, type, location, accountId: newAccount.id })
+  await Hierarchy.insert({ branch, type, location, accountId: newAccount.id })
 
   // Increase Account Count
-  await Company.modifyCount(company, type)
+  await Branch.modifyCount(branch, type)
 
   return newAccount
 }
 
 // CODE: Modify
 
-const modify = async ({ id, name, path, intercompany } = {}) => {
-  await Account.modify(id, { name, path, intercompany })
+const modify = async ({ id, name, path, interbranch } = {}) => {
+  await Account.modify(id, { name, path, interbranch })
   const modifiedAccount = await Account.fetchOne(id)
 
   return modifiedAccount

@@ -5,40 +5,296 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+
   user-select: none;
 }
 html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol';
   font-size: 62.5%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol";
 }
 body {
   // background-color: ffffff00;
   font-size: 1.4rem;
+
   overflow: hidden;
 }
 a {
   text-decoration: none;
+
   color: #000;
 }
 
 main {
-  background-color: #e8e8e8;
-  display: flex;
+  overflow-y: hidden;
   justify-content: space-between;
+  display: flex;
 
-  height: calc(100vh - 4.6rem);
   width: 100vw;
+  height: calc(100vh - 4.6rem);
   height: 100vh;
   padding: 0;
   padding-top: 7rem;
-  overflow-y: hidden;
+
+  background-color: #e8e8e8;
 }
 .scrollable {
-  width: 100%;
   overflow-y: auto;
+
+  width: 100%;
 }
 
 .material-icons {
   font-size: inherit;
+}
+
+.widget-header {
+  padding: .6rem 1rem;
+
+  background-color: #dadada;
+}
+
+.widget-button {
+  .option {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    padding: .5rem 1rem;
+
+    .material-icons {
+      font-size: 1.6rem;
+    }
+
+    &:hover {
+      background-color: #eee;
+    }
+
+    &activate {
+      color: #3125df;
+      background-color: #eaeaee;
+
+      &::after {
+        position: absolute;
+        right: .4rem;
+
+        padding: .8rem .2rem;
+
+        content: '';
+
+        border-radius: 1rem;
+        background-color: #3125df;
+      }
+    }
+  }
+}
+.widget {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin: 1rem 0;
+
+  &-calendar {
+    min-height: 25rem;
+  }
+
+  /* The slider */
+  .switch-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .switch {
+      position: relative;
+
+      display: inline-block;
+
+      width: 3.6rem;
+      height: 1.8rem;
+
+      input {
+        width: 0;
+        height: 0;
+
+        opacity: 0;
+
+        &:checked {
+          + .slider {
+            background-color: #8e21f3;
+          }
+          + .slider:before {
+            transform: translateX(1.7rem);
+          }
+        }
+
+        &:focus {
+          + .slider {
+            box-shadow: 0 0 1px #8e21f3;
+          }
+        }
+      }
+
+      .slider {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        cursor: pointer;
+        -webkit-transition: .1s;
+        transition: .1s;
+
+        border-radius: 3rem;
+        background-color: #ccc;
+
+        &:before {
+          position: absolute;
+          bottom: .3rem;
+          left: .3rem;
+
+          width: 1.2rem;
+          height: 1.2rem;
+
+          content: '';
+          -webkit-transition: .1s;
+          transition: .1s;
+
+          border-radius: 50%;
+          background-color: white;
+        }
+      }
+    }
+  }
+
+  .input,
+  .select {
+    width: 100%;
+    padding: .8rem 1rem;
+
+    border: .1rem solid #e0e0e0;
+    border-radius: .3rem;
+    background-color: #ececec;
+    box-shadow: 0 .1rem .2rem rgba(0, 0, 0, .089);
+  }
+  .input[type='date'] {
+    max-width: 8rem;
+  }
+  label {
+    width: 100%;
+
+    p {
+      font-size: 80%;
+
+      padding: .6rem;
+      padding-bottom: .8rem;
+    }
+  }
+}
+
+.widget-footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  padding: 1.5rem 1rem;
+
+  background-color: #dadada;
+}
+
+// .widget-calendar {
+//   width: 10rem !important;
+// }
+// .s {
+//   width: 100% !important;
+// }
+// .CalendarDay {
+//   width: 2.6rem !important;
+//   height: 2.6rem !important;
+// }
+// .DayPicker_weekHeader {
+//   width: 100%;
+// }
+.CalendarMonth_table {
+  td {
+    font-size: 1.1rem !important;
+
+    width: 3.2rem !important;
+    height: 3.2rem !important;
+  }
+}
+.CalendarMonth_caption {
+  font-size: 1.3rem !important;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+.DayPickerNavigation_button__horizontalDefault {
+  padding: .5rem !important;
+}
+.DayPickerNavigation_svg__horizontal {
+  width: 1.4rem !important;
+  height: 1.4rem !important;
+}
+.DayPicker_weekHeaders__horizontal {
+  margin: 0 !important;
+}
+.CalendarMonth {
+  padding: 0 !important;
+  background-color: initial !important;
+}
+.DayPicker_weekHeader {
+  padding: 0 !important;
+}
+.DayPicker_weekHeader_li {
+  width: 3.2rem !important;
+}
+.DayPicker_transitionContainer {
+  // width: 100% !important;
+  height: 245px !important;
+}
+.DayPicker__horizontal {
+  background-color: initial !important;
+}
+.CalendarMonthGrid {
+  background-color: initial !important;
+}
+.DayPicker {
+  background-color: initial !important;
+
+  div {
+    div {
+      width: initial !important;
+    }
+  }
+}
+.CalendarMonthGrid__horizontal {
+  position: initial !important;
+  right: 0 !important;
+}
+.DayPickerNavigation_leftButton__horizontalDefault {
+  left: 0 !important;
+}
+.DayPickerNavigation_rightButton__horizontalDefault {
+  right: 0 !important;
+}
+.CalendarDay__default {
+}
+.CalendarDay__highlighted_calendar {
+  background-color: #bee6b1 !important;
+  color: #73c75a !important;
+}
+.CalendarDay__blocked_calendar {
+  background-color: #e1e1e1 !important;
+  color: #c5c5c5 !important;
+  border-width: 0 !important;
+}
+.CalendarDay__selected_span {
+  background-color: #b0b0ff !important;
+  border-width: 0 !important;
+}
+.CalendarDay__selected {
+  background-color: #5858fc !important;
+  color: #e6e6fc !important;
+  border-width: 0 !important;
 }

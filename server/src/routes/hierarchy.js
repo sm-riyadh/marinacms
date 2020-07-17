@@ -12,11 +12,11 @@ const url = 'api/hierarchy'
 
 app.get(`/${url}`, async (req, res, next) => {
   try {
-    const { company } = req.query
+    const { branch } = req.query
 
-    await Validator.fetch({ company })
+    await Validator.fetch({ branch })
 
-    const data = await Ops.fetch({ company })
+    const data = await Ops.fetch({ branch })
 
     return res.send(data)
   } catch (error) {

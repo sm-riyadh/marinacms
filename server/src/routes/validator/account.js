@@ -4,8 +4,8 @@ import Account from '../../models/account'
 
 // CODE: Fetch
 
-const fetch = async ({ company, nonempty = false }) => {
-  if (!Validator.isMongoId(company)) throw 'Wrong company ID'
+const fetch = async ({ branch, nonempty = false }) => {
+  if (!Validator.isMongoId(branch)) throw 'Wrong branch ID'
   if (nonempty && !await Validator.isBoolean(nonempty)) throw 'Non-Empty must be a boolean'
 }
 
@@ -15,8 +15,8 @@ const fetchDetails = async ({ id }) => {
 
 // CODE: Create
 
-const create = async ({ company, type, name, path, isFolder, intercompany }) => {
-  if (!Validator.isMongoId(company)) throw 'Wrong company ID'
+const create = async ({ branch, type, name, path, isFolder, interbranch }) => {
+  if (!Validator.isMongoId(branch)) throw 'Wrong branch ID'
   if (!Validator.isAlphanumeric(name.split(' ').join(''))) throw 'Only letters and numbers are allowed for name'
   if (!Validator.isBoolean(isFolder + '')) throw 'Folder must be boolean'
 
@@ -26,7 +26,7 @@ const create = async ({ company, type, name, path, isFolder, intercompany }) => 
 
 // CODE: Modify
 
-const modify = async ({ id, name, path, intercompany }) => {
+const modify = async ({ id, name, path, interbranch }) => {
   if (!Validator.isMongoId(id)) throw 'Wrong ID'
   if (!Validator.isAlphanumeric(name.split(' ').join(''))) throw 'Only letters and numbers are allowed for name'
 }

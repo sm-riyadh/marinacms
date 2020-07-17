@@ -13,10 +13,10 @@ const url = 'journal'
 
 function* handleFetch({ payload = {} }) {
   try {
-    const { id, company, type, size, page, start_date, end_date } = payload
+    const { id, branch, type, size, page, start_date, end_date } = payload
 
     const params = [ id ]
-    const query = { company, type, size, page, start_date, end_date }
+    const query = { branch, type, size, page, start_date, end_date }
 
     yield put(request())
     const { data, error } = yield call(Api.fetch, [ url, { params, query } ])
@@ -34,9 +34,9 @@ function* handleFetch({ payload = {} }) {
 
 function* handleCreate({ payload = {} }) {
   try {
-    const { date, company, credit, credit_note, debit, debit_note, description, amount, comment } = payload
+    const { date, branch, credit, credit_note, debit, debit_note, description, amount, comment } = payload
 
-    const body = { date, company, credit, credit_note, debit, debit_note, description, amount, comment }
+    const body = { date, branch, credit, credit_note, debit, debit_note, description, amount, comment }
 
     yield put(request())
     const { data, error } = yield call(Api.create, [ url, { body } ])

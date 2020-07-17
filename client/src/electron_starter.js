@@ -10,13 +10,13 @@ let win
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width          : 800,
-    height         : 600,
+    minWidth       : 1080,
+    minHeight      : 720,
     frame          : true,
     setResizable   : true,
     webPreferences : { nodeIntegration: true },
   })
-  win.setMaximizable(true)
+  win.maximize(true)
   win.setMenu(null)
 
   const startUrl =

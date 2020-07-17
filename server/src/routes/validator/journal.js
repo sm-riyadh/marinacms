@@ -4,10 +4,10 @@ import Account from '../../models/account'
 
 // CODE: Fetch
 
-const fetch = async ({ company, size, page, type, start_date, end_date } = {}) => {
-  if (!company) throw 'Company is required'
+const fetch = async ({ branch, size, page, type, start_date, end_date } = {}) => {
+  if (!branch) throw 'Branch is required'
 
-  if (!Validator.isMongoId(company)) throw 'Wrong company ID'
+  if (!Validator.isMongoId(branch)) throw 'Wrong branch ID'
   if (size && !await Validator.isNumeric(size + '')) throw 'Invalid date'
   if (page && !await Validator.isNumeric(page + '')) throw 'Invalid date'
   if (start_date && !await Validator.isISO8601(start_date)) throw 'Invalid starting date'
@@ -30,9 +30,9 @@ const fetchDetails = async ({ id } = {}) => {
 }
 // CODE: Create
 
-const create = async ({ date, company, credit, credit_note, debit, debit_note, description, amount, comment } = {}) => {
-  if (!Validator.isMongoId(company)) throw 'Wrong company ID'
-  if (!company) throw 'Company is required'
+const create = async ({ date, branch, credit, credit_note, debit, debit_note, description, amount, comment } = {}) => {
+  if (!Validator.isMongoId(branch)) throw 'Wrong branch ID'
+  if (!branch) throw 'Branch is required'
   if (!credit) throw 'Credit is required'
   if (!debit) throw 'Debit is required'
   if (!amount) throw 'Amount is required'

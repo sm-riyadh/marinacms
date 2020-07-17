@@ -1,99 +1,30 @@
 import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
+import moment from 'moment'
 import styled from 'styled-components'
 
-import Card from '../../component/layout/card/card'
+import { journalAction } from '../../store/actions'
+
+import Card from '../../component/element/card/card'
 
 class Journal extends Component {
-  state = {
-    journal : [
-      {
-        id          : 'OX32043',
-        date        : '12 June, 2020',
-        credit      : 'Bank',
-        credit_note : 'b',
-        debit       : 'Cash in Hand',
-        debit_note  : 'a',
-        amount      : 20000,
-        comment     : 'c',
-      },
-      {
-        id          : 'OX32043',
-        date        : '12 June, 2020',
-        credit      : 'Bank',
-        credit_note : 'b',
-        debit       : 'Cash in Hand',
-        debit_note  : 'a',
-        amount      : 20000,
-        comment     : 'c',
-      },
-      {
-        id          : 'OX32043',
-        date        : '12 June, 2020',
-        credit      : 'Bank',
-        credit_note : 'b',
-        debit       : 'Cash in Hand',
-        debit_note  : 'a',
-        amount      : 20000,
-        comment     : 'c',
-      },
-      {
-        id          : 'OX32043',
-        date        : '12 June, 2020',
-        credit      : 'Bank',
-        credit_note : 'b',
-        debit       : 'Cash in Hand',
-        debit_note  : 'a',
-        amount      : 20000,
-        comment     : 'c',
-      },
-      {
-        id          : 'OX32043',
-        date        : '12 June, 2020',
-        credit      : 'Bank',
-        credit_note : 'b',
-        debit       : 'Cash in Hand',
-        debit_note  : 'a',
-        amount      : 20000,
-        comment     : 'c',
-      },
-      {
-        id          : 'OX32043',
-        date        : '12 June, 2020',
-        credit      : 'Bank',
-        credit_note : 'b',
-        debit       : 'Cash in Hand',
-        debit_note  : 'a',
-        amount      : 20000,
-        comment     : 'c',
-      },
-      {
-        id          : 'OX32043',
-        date        : '12 June, 2020',
-        credit      : 'Bank',
-        credit_note : 'b',
-        debit       : 'Cash in Hand',
-        debit_note  : 'a',
-        amount      : 20000,
-        comment     : 'c',
-      },
-      {
-        id          : 'OX32043',
-        date        : '12 June, 2020',
-        credit      : 'Bank',
-        credit_note : 'b',
-        debit       : 'Cash in Hand',
-        debit_note  : 'a',
-        amount      : 20000,
-        comment     : 'c',
-      },
-    ],
+  componentDidMount() {
+    this.props.fetchJournal({
+      branch     : '5efdede059266615d82e2f24',
+      type       : 'journal',
+      size       : 100,
+      page       : 0,
+      start_date : moment().subtract(7, 'days').toDate(),
+      end_date   : moment().toDate(),
+    })
   }
 
   render() {
-    const { journal } = this.state
+    const { journal, status } = this.props
 
     return (
       <Fragment>
+        Journal
         <Table>
           <thead>
             <tr>
@@ -105,15 +36,16 @@ class Journal extends Component {
             </tr>
           </thead>
           <tbody>
-            {journal.map(({ id, date, credit, credit_note, debit, debit_note, amount, comment }) => (
+            {journal.map(({ serial, date, credit, debit, amount, comment }) => (
               <tr>
-                <td>{id}</td>
+                <td>{serial !== 'NOT_SET' ? serial.toUpperCase() : '...'}</td>
                 <td>{date}</td>
                 <td>
-                  {credit} <i className='material-icons'>double_arrow</i> <FloatRight>({debit})</FloatRight> <br />
-                  <Note>{credit_note}</Note>{' '}
+                  {credit.name} <i className='material-icons'>double_arrow</i> <FloatRight>({debit.name})</FloatRight>{' '}
+                  <br />
+                  <Note>{credit.note}</Note>{' '}
                   <FloatRight>
-                    <Note>{debit_note}</Note>
+                    <Note>{debit.note}</Note>
                   </FloatRight>
                 </td>
                 <td className='alignRight'>{amount}</td>
@@ -175,4 +107,18 @@ const Table = styled.table`
   }
 `
 
-export default Journal
+const mapStateToProps = state => ({
+  journal : state.journal.journal,
+  status  : state.branch.status,
+  // settings : state.settings,
+})
+const mapDispatchToProps = dispatch => ({
+  fetchJournal : payload => dispatch(journalAction.send.fetch(payload)),
+  // createBranch     : payload => dispatch(branchAction.send.create(payload)),
+  // modifyBranch     : payload => dispatch(branchAction.send.modify(payload)),
+  // activateBranch   : payload => dispatch(branchAction.send.activate(payload)),
+  // deactivateBranch : payload => dispatch(branchAction.send.deactivate(payload)),
+  // removeBranch     : payload => dispatch(branchAction.send.remove(payload)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Journal)

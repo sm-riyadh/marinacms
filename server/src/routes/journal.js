@@ -13,11 +13,11 @@ const url = 'api/journal'
 
 app.get(`/${url}`, async (req, res, next) => {
   try {
-    const { company, size, page, type, start_date, end_date } = req.query
+    const { branch, size, page, type, start_date, end_date } = req.query
 
-    await Validator.fetch({ company, size, page, type, start_date, end_date })
+    await Validator.fetch({ branch, size, page, type, start_date, end_date })
 
-    const data = await Ops.fetch({ company, size, page, type, start_date, end_date })
+    const data = await Ops.fetch({ branch, size, page, type, start_date, end_date })
 
     return res.send(data)
   } catch (error) {
@@ -42,13 +42,13 @@ app.get(`/${url}/:id`, async (req, res, next) => {
 
 app.post(`/${url}`, async (req, res, next) => {
   try {
-    const { date, company, credit, credit_note, debit, debit_note, description, amount, comment } = req.body
+    const { date, branch, credit, credit_note, debit, debit_note, description, amount, comment } = req.body
 
-    await Validator.create({ date, company, credit, credit_note, debit, debit_note, description, amount, comment })
+    await Validator.create({ date, branch, credit, credit_note, debit, debit_note, description, amount, comment })
 
     const data = await Ops.create({
       date,
-      company,
+      branch,
       credit,
       credit_note,
       debit,

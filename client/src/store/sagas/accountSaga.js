@@ -16,9 +16,9 @@ const url = 'account'
 
 function* handleFetch({ payload = {} }) {
   try {
-    const { id, company, nonempty } = payload
+    const { id, branch, nonempty } = payload
 
-    const query = { company, nonempty }
+    const query = { branch, nonempty }
     const params = [ id ]
 
     yield put(request())
@@ -41,9 +41,9 @@ function* handleFetch({ payload = {} }) {
 
 function* handleCreate({ payload = {} }) {
   try {
-    const { company, name, path, type, location, isFolder } = payload
+    const { branch, name, path, type, location, isFolder } = payload
 
-    const body = { company, name, path, type, location, isFolder }
+    const body = { branch, name, path, type, location, isFolder }
 
     yield put(request())
     const { data, error } = yield call(Api.create, [ url, { body } ])

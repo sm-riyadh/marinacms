@@ -4,9 +4,14 @@ import { subDays, startOfDay, endOfDay } from 'date-fns'
 const ObjectIdDate = date => mongoose.Types.ObjectId(Math.floor(date / 1000).toString(16) + '0000000000000000')
 
 const JournalSchema = new mongoose.Schema({
-  company     : {
+  branch      : {
     type     : String,
     required : true,
+  },
+  serial      : {
+    type     : String,
+    required : true,
+    default  : 'NOT_SET',
   },
   date        : {
     type     : Date,
@@ -74,9 +79,9 @@ const JournalSchema = new mongoose.Schema({
 })
 
 JournalSchema.methods.toJSON = function() {
-  const { _id, date, company, credit, debit, description, amount, comment, isDisabled } = this.toObject()
+  const { _id, serial, date, branch, credit, debit, description, amount, comment, isDisabled } = this.toObject()
   const entry_date = _id.getTimestamp()
-  return { id: _id, date, company, entry_date, credit, debit, description, amount, comment, isDisabled }
+  return { id: _id, serial, date, branch, entry_date, credit, debit, description, amount, comment, isDisabled }
 }
 
 /* --------------------------------- METHODS -------------------------------- */
@@ -86,7 +91,7 @@ JournalSchema.methods.toJSON = function() {
 JournalSchema.statics.fetchOne = id => Journal.findById(id)
 
 JournalSchema.statics.fetch = (
-  company,
+  branch,
   {
     size = 50,
     page = 0,
@@ -97,8 +102,8 @@ JournalSchema.statics.fetch = (
   }
 ) =>
   Journal.find({
-    company,
-    $or     : [
+    branch,
+    $or    : [
       {
         'debit.code' : {
           $gte : lowerRangeCode,
@@ -112,7 +117,7 @@ JournalSchema.statics.fetch = (
         },
       },
     ],
-    date    : {
+    date   : {
       $gte : startDate.getTime(),
       $lt  : endDate.getTime(),
     },
@@ -129,11 +134,11 @@ JournalSchema.statics.fetch = (
 // CODE: Create
 
 JournalSchema.statics.create = (
-  { date, company, credit, credit_note, debit, debit_note, description, amount, comment } = {}
+  { date, branch, credit, credit_note, debit, debit_note, description, amount, comment } = {}
 ) =>
   Journal({
     date,
-    company,
+    branch,
     credit      : {
       id   : credit.id,
       code : credit.code,

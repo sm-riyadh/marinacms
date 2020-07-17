@@ -1,51 +1,51 @@
 import mongoose from 'mongoose'
 
 const AccountSchema = new mongoose.Schema({
-  company      : {
+  branch      : {
     type     : mongoose.Schema.ObjectId,
     required : true,
   },
-  name         : {
+  name        : {
     type     : String,
     trim     : true,
     required : true,
   },
-  type         : {
+  type        : {
     type     : String,
     required : true,
   },
-  code         : {
+  code        : {
     type     : Number,
     min      : 100000,
     max      : 999999,
     required : true,
   },
-  balance      : {
+  balance     : {
     type     : Number,
     default  : 0,
     required : true,
   },
-  path         : [
+  path        : [
     {
       type : String,
     },
   ],
-  isFolder     : {
+  isFolder    : {
     type     : Boolean,
     default  : false,
     required : true,
   },
-  intercompany : {
-    to_company : mongoose.Schema.ObjectId,
-    deposit    : mongoose.Schema.ObjectId,
-    due        : mongoose.Schema.ObjectId,
+  interbranch : {
+    to_branch : mongoose.Schema.ObjectId,
+    deposit   : mongoose.Schema.ObjectId,
+    due       : mongoose.Schema.ObjectId,
   },
-  isDisabled   : {
+  isDisabled  : {
     type     : Boolean,
     default  : false,
     required : true,
   },
-  transaction  : [
+  transaction : [
     {
       journal_id : mongoose.Schema.ObjectId,
     },
@@ -55,27 +55,27 @@ const AccountSchema = new mongoose.Schema({
 AccountSchema.methods.toJSON = function() {
   const {
     _id,
-    company,
+    branch,
     name,
     type,
     code,
     path,
     balance,
-    intercompany,
+    interbranch,
     isFolder,
     isDisabled,
     transaction,
   } = this.toObject()
 
   return {
-    id           : _id,
-    company,
+    id          : _id,
+    branch,
     name,
     type,
     code,
     path,
     balance,
-    intercompany,
+    interbranch,
     isFolder,
     isDisabled,
     transaction,
@@ -88,17 +88,17 @@ AccountSchema.methods.toJSON = function() {
 
 AccountSchema.statics.fetchOne = id => Account.findById(id)
 
-AccountSchema.statics.fetch = (company, payload) => Account.find({ company, ...payload })
+AccountSchema.statics.fetch = (branch, payload) => Account.find({ branch, ...payload })
 
-AccountSchema.statics.fetchNonEmpty = (company, payload) =>
-  Account.find({ company, ...payload, transaction: { $exists: true, $ne: [] } })
+AccountSchema.statics.fetchNonEmpty = (branch, payload) =>
+  Account.find({ branch, ...payload, transacwtion: { $exists: true, $ne: [] } })
 
-AccountSchema.statics.fetchInterCompany = id => Account.findOne({ _id: id, intercompany: { $exists: true } })
+AccountSchema.statics.fetchInterBranch = id => Account.findOne({ _id: id, interbranch: { $exists: true } })
 
 // CODE: Create
 
-AccountSchema.statics.create = ({ company, type, name, code, path, isFolder, intercompany }) =>
-  Account({ company, type, name, code, path, isFolder, intercompany }).save()
+AccountSchema.statics.create = ({ branch, type, name, code, path, isFolder, interbranch }) =>
+  Account({ branch, type, name, code, path, isFolder, interbranch }).save()
 
 // CODE: Modify
 

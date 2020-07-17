@@ -4,8 +4,8 @@ import cloneDeep from 'lodash.clonedeep'
 import { JOURNAL } from '../constants'
 
 const initialState = {
-  journal_list : '',
-  input        : {
+  journal : [],
+  input   : {
     date          : moment(),
     debit         : '',
     debit_note    : '',
@@ -16,7 +16,7 @@ const initialState = {
     comment       : '',
     shadowEntries : [],
   },
-  status       : {
+  status  : {
     success : false,
     request : false,
     failed  : false,

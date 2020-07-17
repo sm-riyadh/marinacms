@@ -2,16 +2,16 @@ import Hierarchy from '../models/hierarchy'
 
 // CODE: Fetch
 
-const fetch = async ({ company }) => {
-  const hierarchy = await Hierarchy.fetch({ company })
+const fetch = async ({ branch }) => {
+  const hierarchy = await Hierarchy.fetch({ branch })
 
   return hierarchy
 }
 
 // CODE: Create
 
-const create = async ({ company, hierarchy }) => {
-  const newHierarchy = await Hierarchy.create({ company, hierarchy })
+const create = async ({ branch, hierarchy }) => {
+  const newHierarchy = await Hierarchy.create({ branch, hierarchy })
 
   return newHierarchy
 }

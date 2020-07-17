@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: 'user'
   },
-  company: {
+  branch: {
     type: String,
     minlength: 1,
     required: true
@@ -65,7 +65,7 @@ UserSchema.methods.toJSON = function () {
   const user = this
   const userObject = user.toObject()
 
-  return _.pick(userObject, ['_id', 'name', 'username', 'power', 'company'])
+  return _.pick(userObject, ['_id', 'name', 'username', 'power', 'branch'])
 }
 
 UserSchema.methods.generateAuthToken = function (access, system) {

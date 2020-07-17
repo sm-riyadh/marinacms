@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 
-import Card from '../../component/layout/card/card'
+import Card from '../../component/element/card/card'
 
 class Employee extends Component {
   state = {

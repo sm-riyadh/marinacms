@@ -1,7 +1,7 @@
 import Validator from 'validator'
 
-const fetch = async ({ company } = {}) => {
-  if (!Validator.isMongoId(company)) throw 'Wrong company ID'
+const fetch = async ({ branch } = {}) => {
+  if (!Validator.isMongoId(branch)) throw 'Wrong branch ID'
 }
 
 const replace = async ({ id, type, hierarchy } = {}) => {

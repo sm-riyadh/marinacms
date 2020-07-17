@@ -12,7 +12,7 @@ const authenticateAdmin = async (req, res, next) => {
       id       : user.id,
       username : user.username,
       name     : user.name,
-      company  : user.company,
+      branch   : user.branch,
       power    : user.power,
     }
     return next()

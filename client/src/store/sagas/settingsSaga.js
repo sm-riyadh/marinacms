@@ -21,8 +21,8 @@ function* handleFetch({ payload = {} }) {
     // const { data, error } = yield call(Api.fetch, [ url, { params } ])
     const error = false
     const data = {
-      isCollapsed     : false,
-      selectedCompany : '5e8f203e1a53001dec074c9a',
+      isCollapsed    : false,
+      selectedBranch : '5e8f203e1a53001dec074c9a',
     }
 
     if (!error) {

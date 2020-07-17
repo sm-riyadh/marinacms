@@ -4,7 +4,7 @@ import { SETTINGS } from '../constants'
 
 const initialState = {
   sidebar_collapse : false,
-  selected_company : '',
+  selected_branch  : '',
 
   status           : {
     success : false,

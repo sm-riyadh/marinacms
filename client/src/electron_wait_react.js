@@ -10,10 +10,12 @@ const tryConnection = () =>
   client.connect({ port: port }, () => {
     client.end()
     if (!startedElectron) {
-      console.log('starting electron')
+      console.log('Starting electron')
       startedElectron = true
-      const exec = require('child_process').exec
+
+      const exec = require('n').exec
       const electron = exec('npm run electron')
+
       electron.stdout.on('data', function(data) {
         console.log('stdout: ' + data.toString())
       })

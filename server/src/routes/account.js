@@ -12,11 +12,11 @@ const url = 'api/account'
 
 app.get(`/${url}`, async (req, res, next) => {
   try {
-    const { company, nonempty } = req.query
+    const { branch, nonempty } = req.query
 
-    await Validator.fetch({ company, nonempty })
+    await Validator.fetch({ branch, nonempty })
 
-    const data = await Ops.fetch({ company, nonempty })
+    const data = await Ops.fetch({ branch, nonempty })
 
     return res.send(data)
   } catch (error) {
@@ -42,11 +42,11 @@ app.get(`/${url}/:id`, async (req, res, next) => {
 
 app.post(`/${url}`, async (req, res, next) => {
   try {
-    const { company, type, name, path, location, isFolder, intercompany } = req.body
+    const { branch, type, name, path, location, isFolder, interbranch } = req.body
 
-    await Validator.create({ company, type, name, path, location, isFolder, intercompany })
+    await Validator.create({ branch, type, name, path, location, isFolder, interbranch })
 
-    const data = await Ops.create({ company, type, name, path, location, isFolder, intercompany })
+    const data = await Ops.create({ branch, type, name, path, location, isFolder, interbranch })
 
     return res.send(data)
   } catch (error) {
@@ -60,11 +60,11 @@ app.patch(`/${url}/:id`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    const { name, path, intercompany } = req.body
+    const { name, path, interbranch } = req.body
 
-    await Validator.modify({ id, name, path, intercompany })
+    await Validator.modify({ id, name, path, interbranch })
 
-    const data = await Ops.modify({ id, name, path, intercompany })
+    const data = await Ops.modify({ id, name, path, interbranch })
 
     return res.send(data)
   } catch (error) {

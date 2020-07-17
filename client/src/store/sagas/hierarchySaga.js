@@ -15,9 +15,9 @@ const url = 'hierarchy'
 
 function* handleFetch({ payload = {} }) {
   try {
-    const { company } = payload
+    const { branch } = payload
 
-    const query = { company }
+    const query = { branch }
     const params = []
 
     yield put(request())
