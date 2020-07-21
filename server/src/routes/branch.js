@@ -8,7 +8,7 @@ const app = Router()
 
 // Route
 const url = 'api/branch'
-
+const socketLink = 'branch'
 // CODE: Fetch
 
 app.get(`/${url}`, async (req, res, next) => {
@@ -25,9 +25,9 @@ app.get(`/${url}/:id`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.fetchDetails({ id })
+    await Validator.fetchDetails({ id, isPrimary })
 
-    const data = await Ops.fetchDetails({ id })
+    const data = await Ops.fetchDetails({ id, isPrimary })
 
     return res.send(data)
   } catch (error) {
@@ -45,6 +45,7 @@ app.post(`/${url}`, async (req, res, next) => {
 
     const data = await Ops.create({ name })
 
+    res.io.sockets.emit(socketLink, { action: 'add', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -58,10 +59,11 @@ app.patch(`/${url}/:id`, async (req, res, next) => {
     const { id } = req.params
     const { name } = req.body
 
-    await Validator.modify({ id, name })
+    await Validator.modify({ id, name, isPrimary })
 
-    const data = await Ops.modify({ id, name })
+    const data = await Ops.modify({ id, name, isPrimary })
 
+    res.io.sockets.emit(socketLink, { action: 'modify', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -76,6 +78,7 @@ app.patch(`/${url}/:id/activate`, async (req, res, next) => {
 
     const data = await Ops.activate({ id })
 
+    res.io.sockets.emit(socketLink, { action: 'activate', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -89,6 +92,7 @@ app.patch(`/${url}/:id/deactivate`, async (req, res, next) => {
 
     const data = await Ops.deactivate({ id })
 
+    res.io.sockets.emit(socketLink, { action: 'deactivate', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -104,6 +108,7 @@ app.delete(`/${url}/:id`, async (req, res, next) => {
 
     const data = await Ops.remove({ id })
 
+    res.io.sockets.emit(socketLink, { action: 'remove', data })
     return res.send(data)
   } catch (error) {
     return next(error)

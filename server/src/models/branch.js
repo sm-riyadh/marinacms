@@ -18,6 +18,11 @@ const BranchSchema = new mongoose.Schema({
     type    : [ mongoose.Schema.ObjectId ],
     default : [],
   },
+  isPrimary             : {
+    type     : Boolean,
+    default  : false,
+    required : true,
+  },
   balance               : {
     assets      : {
       type     : Number,
@@ -82,13 +87,14 @@ const BranchSchema = new mongoose.Schema({
 /* --------------------------------- PARSING --------------------------------- */
 
 BranchSchema.methods.toJSON = function() {
-  const { _id, name, balance, correspondingAccounts, accountCount, isDisabled } = this.toObject()
+  const { _id, name, balance, correspondingAccounts, accountCount, isPrimary, isDisabled } = this.toObject()
   return {
     id                    : _id,
     name,
     balance,
     correspondingAccounts,
     accountCount,
+    isPrimary,
     isDisabled,
   }
 }

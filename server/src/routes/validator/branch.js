@@ -17,9 +17,10 @@ const create = async ({ name } = {}) => {
 
 // CODE: Modify
 
-const modify = async ({ id, name } = {}) => {
+const modify = async ({ id, name, isPrimary } = {}) => {
   if (!Validator.isMongoId(id)) throw 'Wrong ID'
   if (!Validator.isAlphanumeric(name.split(' ').join(''))) throw 'Only letters and numbers are allowed for name'
+  if (!Validator.isBoolean(isPrimary)) throw 'isPrimary must be a boolean'
 }
 
 const activate = async ({ id } = {}) => {

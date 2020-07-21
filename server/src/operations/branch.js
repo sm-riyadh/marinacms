@@ -103,15 +103,15 @@ const create = async ({ name }) => {
 
 // CODE: Modify
 
-const modify = async ({ id, name }) => {
-  const Bodifiedbranch = await Branch.modify(id, { name })
+const modify = async ({ id, name, isPrimary }) => {
+  const modifiedbranch = await Branch.modify(id, { name, isPrimary })
 
   if (name) {
     const { correspondingAccounts } = await Branch.fetchOne(id)
     correspondingAccounts.map(id => accountOps.modify({ id, name }))
   }
 
-  return Bodifiedbranch
+  return modifiedbranch
 }
 
 const activate = async ({ id }) => {
