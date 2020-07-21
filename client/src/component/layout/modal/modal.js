@@ -5,7 +5,7 @@ import { Card } from '../../element'
 
 const modal = ({ noPadding, modalClose, style, children }) => {
   return (
-    <Container>
+    <ContainerStyled>
       <Backdrop onClick={modalClose} />
       <Card padding={noPadding && '0'}>
         <Header>
@@ -16,7 +16,7 @@ const modal = ({ noPadding, modalClose, style, children }) => {
         <Body style={style}>{children}</Body>
         {/* <Padding /> */}
       </Card>
-    </Container>
+    </ContainerStyled>
   )
 }
 
@@ -28,9 +28,10 @@ const Body = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
   display: block;
-  height: calc(100% - 7.5rem);
+  max-height: 80vh;
   padding: 2rem;
 `
+
 const Backdrop = styled.div`
   position: absolute;
   background-color: rgba(97, 97, 97, 0.541);
@@ -62,7 +63,7 @@ const Header = styled.header`
   background-color: rgba(0, 0, 0, 0.1);
   z-index: 200;
 `
-const Container = styled.div`
+const ContainerStyled = styled.div`
   position: fixed;
   display: flex;
   justify-content: center;
@@ -73,4 +74,5 @@ const Container = styled.div`
   height: 100vh;
   z-index: 100;
 `
+
 export default modal

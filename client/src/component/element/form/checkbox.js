@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 
-const Checkbox = ({ label, style, radius, icon, onChange, value = false, checked }) => {
+const Checkbox = ({ label, style, radius, icon, onChange, value = false }) => {
   const handleChange = () => {
     onChange(!value)
   }
@@ -9,14 +9,7 @@ const Checkbox = ({ label, style, radius, icon, onChange, value = false, checked
   return (
     <div>
       <LabelStyled>
-        <CheckboxStyled
-          type='checkbox'
-          style={style}
-          radius={radius}
-          onChange={handleChange}
-          value={value}
-          checked={checked && checked}
-        />
+        <CheckboxStyled type='checkbox' style={style} radius={radius} onChange={handleChange} checked={value} />
         <div className='custombox' />
         <TextStyled>{label}</TextStyled>
       </LabelStyled>
@@ -26,16 +19,17 @@ const Checkbox = ({ label, style, radius, icon, onChange, value = false, checked
 
 const CheckboxStyled = styled.input`
   /* visibility: hidden; */
-  margin: 0 1rem;
   outline: none;
   opacity: 0;
 
   & + .custombox {
     content: '';
-    margin: 0 0.5rem;
-    position: absolute;
+    position: relative;
+    left: -0.5rem;
+
     width: 1.5rem;
     height: 1.5rem;
+
     background-color: #ffffff;
     border: 0.3rem solid #e1e1e1;
     border-radius: ${({ radius }) => (radius ? radius : '0.2rem')};

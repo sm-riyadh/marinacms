@@ -1,6 +1,5 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
 
 const WidgetBar = ({ children, backgroundColor, size, offset }) => {
   return (
@@ -31,7 +30,7 @@ const VerticalBar = styled.aside`
   background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : '#ffffff')};
 
   width: ${({ size }) => (size ? size : '25vw')};
-  min-width: 18rem;
+  min-width: 20rem;
   height: ${({ offset }) => `calc(100vh - ${offset})`};
   /* padding-bottom: 4.6rem; */
 
@@ -40,6 +39,7 @@ const VerticalBar = styled.aside`
 
   border: 0 solid #ccc;
   border-width: 0 0.1rem;
+  overflow-x: hidden;
   overflow-y: auto;
 `
 
