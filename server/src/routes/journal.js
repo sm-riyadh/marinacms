@@ -8,6 +8,7 @@ const app = Router()
 
 // Route
 const url = 'api/journal'
+const socketLink = 'journal'
 
 // CODE: Fetch
 
@@ -58,6 +59,7 @@ app.post(`/${url}`, async (req, res, next) => {
       comment,
     })
 
+    res.io.sockets.emit(socketLink, { action: 'add', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -76,6 +78,7 @@ app.patch(`/${url}/:id`, async (req, res, next) => {
 
     const data = await Ops.modify({ id, date, credit_note, debit_note, description, comment })
 
+    res.io.sockets.emit(socketLink, { action: 'modify', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -90,6 +93,7 @@ app.patch(`/${url}/:id/activate`, async (req, res, next) => {
 
     const data = await Ops.activate({ id })
 
+    res.io.sockets.emit(socketLink, { action: 'activate', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -104,6 +108,7 @@ app.patch(`/${url}/:id/deactivate`, async (req, res, next) => {
 
     const data = await Ops.deactivate({ id })
 
+    res.io.sockets.emit(socketLink, { action: 'deactivate', data })
     return res.send(data)
   } catch (error) {
     return next(error)

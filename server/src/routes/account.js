@@ -48,6 +48,7 @@ app.post(`/${url}`, async (req, res, next) => {
 
     const data = await Ops.create({ branch, type, name, path, location, isFolder, interbranch })
 
+    res.io.sockets.emit(socketLink, { action: 'add', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -66,6 +67,7 @@ app.patch(`/${url}/:id`, async (req, res, next) => {
 
     const data = await Ops.modify({ id, name, path, interbranch })
 
+    res.io.sockets.emit(socketLink, { action: 'modify', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -80,6 +82,7 @@ app.patch(`/${url}/:id/activate`, async (req, res, next) => {
 
     const data = await Ops.activate({ id })
 
+    res.io.sockets.emit(socketLink, { action: 'activate', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -94,6 +97,7 @@ app.patch(`/${url}/:id/deactivate`, async (req, res, next) => {
 
     const data = await Ops.deactivate({ id })
 
+    res.io.sockets.emit(socketLink, { action: 'deactivate', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -110,6 +114,7 @@ app.delete(`/${url}/:id`, async (req, res, next) => {
 
     const data = await Ops.remove({ id })
 
+    res.io.sockets.emit(socketLink, { action: 'remove', data })
     return res.send(data)
   } catch (error) {
     return next(error)

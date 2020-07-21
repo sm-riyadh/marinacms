@@ -42,11 +42,11 @@ const create = async ({ date, branch, credit, credit_note, debit, debit_note, de
   if (!Validator.isMongoId(credit)) throw 'Invalid credit'
   if (!Validator.isMongoId(debit)) throw 'Invalid debit'
 
-  if (!Validator.isAlphanumeric(credit_note.split(' ').join('')))
+  if (!credit_note || !Validator.isAlphanumeric(credit_note.split(' ').join('')))
     throw 'Only letters and numbers are allowed for credit note'
-  if (!Validator.isAlphanumeric(debit_note.split(' ').join('')))
+  if (!debit_note || !Validator.isAlphanumeric(debit_note.split(' ').join('')))
     throw 'Only letters and numbers are allowed for debit note'
-  if (!Validator.isAlphanumeric(description.split(' ').join('')))
+  if (!description || !Validator.isAlphanumeric(description.split(' ').join('')))
     throw 'Only letters and numbers are allowed for description'
   if (!Validator.isAlphanumeric(comment.split(' ').join(''))) throw 'Only letters and numbers are allowed for comment'
 
@@ -94,11 +94,12 @@ const create = async ({ date, branch, credit, credit_note, debit, debit_note, de
 const modify = async ({ id, date, credit_note, debit_note, description, comment } = {}) => {
   if (!Validator.isMongoId(id)) throw 'Wrong ID'
   if (!Validator.isISO8601(date)) throw 'Invalid date'
-  if (!Validator.isAlphanumeric(credit_note.split(' ').join('')))
+
+  if (!credit_note || !Validator.isAlphanumeric(credit_note.split(' ').join('')))
     throw 'Only letters and numbers are allowed for credit note'
-  if (!Validator.isAlphanumeric(debit_note.split(' ').join('')))
+  if (!debit_note || !Validator.isAlphanumeric(debit_note.split(' ').join('')))
     throw 'Only letters and numbers are allowed for debit note'
-  if (!Validator.isAlphanumeric(description.split(' ').join('')))
+  if (!description || !Validator.isAlphanumeric(description.split(' ').join('')))
     throw 'Only letters and numbers are allowed for description'
   if (!Validator.isAlphanumeric(comment.split(' ').join(''))) throw 'Only letters and numbers are allowed for comment'
 }

@@ -2,6 +2,8 @@ import './db/mongoose'
 import express from 'express'
 import cors from 'cors'
 import bodyparser from 'body-parser'
+import { createServer } from 'http'
+import socketIo from 'socket.io'
 
 import { host, port } from './config'
 
@@ -12,6 +14,12 @@ import branch from './routes/branch'
 import hierarchy from './routes/hierarchy'
 
 const app = express()
+const server = createServer(app)
+
+const io = socketIo(server, {
+  perMessageDeflate : false,
+  serveClient       : false,
+})
 
 // Cors Config
 const whitelist = [ `http://${host}` ]
@@ -33,6 +41,10 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', [ 'GET', 'POST', 'PATCH', 'DELETE' ])
   next()
 })
+app.use((req, res, next) => {
+  res.io = io
+  next()
+})
 
 app.use(journal)
 app.use(account)
@@ -41,7 +53,7 @@ app.use(hierarchy)
 
 // Server Config
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.clear()
   console.log(`> Time: ${new Date()}\n> Host: ${host}\n> Post: ${port} \n----------------------------------------`)
 })
