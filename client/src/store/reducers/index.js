@@ -5,7 +5,6 @@ import account from './account'
 import branch from './branch'
 import hierarchy from './hierarchy'
 import settings from './settings'
-// import tree from './tree'
 
 const rootReducer = combineReducers({
   journal,
@@ -13,7 +12,6 @@ const rootReducer = combineReducers({
   branch,
   hierarchy,
   settings,
-  // tree
 })
 
 export default rootReducer

@@ -1,12 +1,26 @@
 import cloneDeep from 'lodash.clonedeep'
+import moment from 'moment'
 
 import { SETTINGS } from '../constants'
 
 const initialState = {
-  sidebar_collapse : false,
-  selected_branch  : '',
+  selected_branch    : '',
+  sidebar_collapse   : false,
+  selected_branch    : '',
 
-  status           : {
+  // Journal Filters
+  filter_date_single : false,
+  filter_type        : 'journal',
+  filter_date_type   : 'voucher',
+  filter_date        : 'custom',
+  filter_account     : '',
+  filter_voucher_id  : '',
+  filter_size        : 50,
+  filter_page        : 0,
+  start_date         : moment().subtract(30, 'days'),
+  end_date           : moment(),
+
+  status             : {
     success : false,
     request : false,
     failed  : false,
@@ -27,7 +41,7 @@ const journal = (state = initialState, { type, payload }) => {
     case SETTINGS.SAVE.MODIFY: {
       const newState = cloneDeep(state)
 
-      newState[payload.key] = payload.data.value
+      newState[payload.key] = payload.data
 
       return newState
     }
