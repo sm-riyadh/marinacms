@@ -20,10 +20,7 @@ import TreeView from './components/TreeView'
 import AccountCreateModal from './components/AccountCreateModal'
 
 export class Account extends Component {
-  componentDidMount() {
-    this.props.fetchAccount({ branch: '5efdede059266615d82e2f24' })
-    this.props.fetchHierarchy({ branch: '5efdede059266615d82e2f24' })
-  }
+  componentDidMount() {}
 
   state = {
     modal_new_account : false,

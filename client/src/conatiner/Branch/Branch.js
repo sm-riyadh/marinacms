@@ -7,9 +7,7 @@ import { branchAction } from '../../store/actions'
 import { Card, Container } from '../../component/element'
 
 export class Branch extends Component {
-  componentDidMount() {
-    this.props.fetchBranch()
-  }
+  componentDidMount() {}
 
   state = {
     modal_new_branch : false,

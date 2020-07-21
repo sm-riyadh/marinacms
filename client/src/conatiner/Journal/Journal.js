@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
+import dateFormat from 'dateformat'
 import styled from 'styled-components'
 
 import { journalAction } from '../../store/actions'
@@ -8,16 +8,7 @@ import { journalAction } from '../../store/actions'
 import Card from '../../component/element/card/card'
 
 class Journal extends Component {
-  componentDidMount() {
-    this.props.fetchJournal({
-      branch     : '5efdede059266615d82e2f24',
-      type       : 'journal',
-      size       : 100,
-      page       : 0,
-      start_date : moment().subtract(7, 'days').toDate(),
-      end_date   : moment().toDate(),
-    })
-  }
+  componentDidMount() {}
 
   render() {
     const { journal, status } = this.props
@@ -39,7 +30,15 @@ class Journal extends Component {
             {journal.map(({ serial, date, credit, debit, amount, comment }) => (
               <tr>
                 <td>{serial !== 'NOT_SET' ? serial.toUpperCase() : '...'}</td>
-                <td>{date}</td>
+                <td>
+                  <span title={dateFormat(date, 'ddd, dS mmm, yyyy, h:MM:ss TT')}>
+                    {new Date(date).getFullYear() === new Date().getFullYear() ? (
+                      dateFormat(date, 'dS mmm')
+                    ) : (
+                      dateFormat(date, 'dS mmm, yyyy')
+                    )}
+                  </span>
+                </td>
                 <td>
                   {credit.name} <i className='material-icons'>double_arrow</i> <FloatRight>({debit.name})</FloatRight>{' '}
                   <br />
@@ -69,15 +68,17 @@ const Note = styled.span`
 const Table = styled.table`
   width: 100%;
   border-spacing: 0;
+  font-size: 90%;
 
   thead {
     tr {
-      background-color: #eee;
-
       th {
+        background-color: #eee;
         text-align: left;
         padding: 1rem 0.4rem;
         color: #000;
+        position: sticky;
+        top: -4rem;
 
         &:first-child {
           padding-left: 3rem;

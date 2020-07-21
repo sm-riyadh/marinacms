@@ -11,15 +11,12 @@ import { DayPickerSingleDateController, DayPickerRangeController } from 'react-d
 import { WHeader, WFooter, Widget } from '../../component/layout/widgetBar/widgetBar'
 import Modal from '../../component/layout/modal/modal'
 import { Button, Grid, Form, Textarea, Input, Select, Checkbox } from '../../component/element'
+import ToPrint from './ToPrint'
 
-import { journalAction, accountAction } from '../../store/actions'
+import { journalAction, accountAction, settingsAction } from '../../store/actions'
 
-export class Activity extends Component {
-  componentDidMount() {
-    this.props.fetchAccount({
-      branch : '5efdede059266615d82e2f24',
-    })
-  }
+class JournalWidget extends Component {
+  componentDidMount() {}
 
   state = {
     modal_new_journal     : false,
@@ -29,13 +26,6 @@ export class Activity extends Component {
     page                  : 0,
 
     focused_input         : 'startDate',
-    filter_type           : 'journal',
-    filter_date_type      : 'voucher',
-    filter_date           : '3_days',
-    filter_account        : '',
-    filter_voucher_id     : '',
-    start_date            : moment().subtract(100, 'days'),
-    end_date              : moment(),
 
     date                  : moment(),
     destination           : '',
@@ -49,102 +39,79 @@ export class Activity extends Component {
 
   onChangeHandler = (name, action) => this.setState({ [name]: action })
 
-  onFilterChangeHandler = (name, value) => {
-    this.setState({ [name]: value }, () => {
-      const shouldFetch = [ 'filter_type', 'start_date', 'end_date' ].includes(name)
+  onFilterChangeHandler = async (name, value) => {
+    await this.props.modifySettings({ key: name, data: value })
 
-      if (shouldFetch)
-        this.props.fetchJournal({
-          branch     : '5efdede059266615d82e2f24',
-          type       : this.state.filter_type,
-          size       : 12,
-          page       : 0,
-          start_date : this.state.start_date.toDate(),
-          end_date   : this.state.end_date.toDate(),
-        })
+    const shouldReFetch = [ 'filter_type', 'filter_size', 'filter_page', 'start_date', 'end_date' ].includes(name)
+
+    if (shouldReFetch) this.reFetchJournal()
+  }
+
+  reFetchJournal = async () => {
+    this.props.fetchJournal({
+      branch     : this.props.settings.selected_branch,
+      type       : this.props.settings.filter_type,
+      size       : this.props.settings.filter_size,
+      page       : this.props.settings.filter_page,
+      start_date : this.props.settings.start_date.toDate(),
+      end_date   : this.props.settings.end_date.toDate(),
     })
   }
-  onSingleDateFilterChangeHandler = (name, value) => {
-    this.setState({ [name]: value, filter_date: 'custom_single' }, () =>
-      this.props.fetchJournal({
-        branch     : '5efdede059266615d82e2f24',
-        type       : this.state.filter_type,
-        start_date : this.state.end_date.toDate(),
-        end_date   : this.state.end_date.toDate(),
-      })
-    )
-  }
 
-  onDateFilterChangeHandler = (startDate, endDate) => {
-    if (!endDate) endDate = this.state.end_date
-
-    this.setState({ start_date: startDate, end_date: endDate, filter_date: 'custom' }, () =>
-      this.props.fetchJournal({
-        branch     : '5efdede059266615d82e2f24',
-        type       : this.state.filter_type,
-        start_date : this.state.start_date.toDate(),
-        end_date   : this.state.end_date.toDate(),
-      })
-    )
-  }
-
-  onDateFilterHandler = preset => {
+  onDateFilterHandler = async preset => {
     let start_date, end_date
 
     switch (preset) {
       case 'today': {
-        start_date = moment()
-        end_date = moment()
+        this.props.modifySettings({ key: 'filter_date', data: preset })
+        await this.props.modifySettings({ key: 'start_date', data: moment() })
+        await this.props.modifySettings({ key: 'end_date', data: moment() })
         break
       }
       case '3_days': {
-        start_date = moment().subtract(2, 'days')
-        end_date = moment()
+        this.props.modifySettings({ key: 'filter_date', data: preset })
+        await this.props.modifySettings({ key: 'start_date', data: moment().subtract(2, 'days') })
+        await this.props.modifySettings({ key: 'end_date', data: moment() })
         break
       }
       case 'week': {
-        start_date = moment().subtract(1, 'weeks')
-        end_date = moment()
+        this.props.modifySettings({ key: 'filter_date', data: preset })
+        await this.props.modifySettings({ key: 'start_date', data: moment().subtract(1, 'weeks') })
+        await this.props.modifySettings({ key: 'end_date', data: moment() })
         break
       }
       case 'month': {
-        start_date = moment().subtract(1, 'months')
-        end_date = moment()
+        this.props.modifySettings({ key: 'filter_date', data: preset })
+        await this.props.modifySettings({ key: 'start_date', data: moment().subtract(1, 'months') })
+        await this.props.modifySettings({ key: 'end_date', data: moment() })
         break
       }
       case 'month': {
-        start_date = moment().subtract(2, 'months')
-        end_date = moment().subtract(1, 'months')
+        this.props.modifySettings({ key: 'filter_date', data: preset })
+        await this.props.modifySettings({ key: 'start_date', data: moment().subtract(2, 'months') })
+        await this.props.modifySettings({ key: 'end_date', data: moment().subtract(1, 'months') })
         break
       }
       case 'year': {
-        start_date = moment().subtract(1, 'years')
-        end_date = moment()
+        this.props.modifySettings({ key: 'filter_date', data: preset })
+        await this.props.modifySettings({ key: 'start_date', data: moment().subtract(1, 'years') })
+        await this.props.modifySettings({ key: 'end_date', data: moment() })
         break
       }
       case 'custom_single': {
-        start_date = this.state.end_date
-        end_date = this.state.end_date
-        this.setState({ filter_date: preset })
+        await this.props.modifySettings({ key: 'start_date', data: this.props.settings.end_date })
+        this.props.modifySettings({ key: 'filter_date', data: preset })
         break
       }
       case 'custom': {
-        this.setState({ filter_date: preset })
+        this.props.modifySettings({ key: 'filter_date', data: preset })
         return
       }
       default:
-        start_date = this.state.start_date
-        end_date = this.state.end_date
         break
     }
 
-    this.setState({ start_date, end_date, filter_date: preset }, () =>
-      this.props.fetchJournal({
-        branch     : '5efdede059266615d82e2f24',
-        start_date : start_date.toDate(),
-        end_date   : end_date.toDate(),
-      })
-    )
+    this.reFetchJournal()
   }
 
   setJournalIndex = index => this.setState({ journal_index: index })
@@ -178,17 +145,27 @@ export class Activity extends Component {
       comment     : this.state.comment,
     })
     this.onChangeHandler('modal_new_journal', false)
-    this.props.fetchJournal({
-      branch     : '5efdede059266615d82e2f24',
-      type       : this.state.filter_type,
-      size       : 12,
-      page       : 0,
-      start_date : this.state.start_date.toDate(),
-      end_date   : this.state.end_date.toDate(),
-    })
+    // this.props.fetchJournal({
+    //   branch     : '5efdede059266615d82e2f24',
+    //   type       : filter_type,
+    //   size       : 12,
+    //   page       : 0,
+    //   start_date : this.state.start_date.toDate(),
+    //   end_date   : this.state.end_date.toDate(),
+    // })
   }
   render() {
-    const { modal_new_journal } = this.state
+    const { modal_new_journal, modal_print } = this.state
+    const {
+      filter_type,
+      filter_date_type,
+      filter_date,
+      filter_account,
+      filter_voucher_id,
+      start_date,
+      end_date,
+    } = this.props.settings
+
     const { journal, account, status } = this.props
 
     return (
@@ -201,17 +178,17 @@ export class Activity extends Component {
                 label='Type'
                 noEmpty
                 icon={
-                  this.state.filter_type === 'journal' ? (
+                  filter_type === 'journal' ? (
                     'class'
-                  ) : this.state.filter_type === 'assets' ? (
+                  ) : filter_type === 'assets' ? (
                     'monetization_on'
-                  ) : this.state.filter_type === 'liabilities' ? (
+                  ) : filter_type === 'liabilities' ? (
                     'account_balance'
-                  ) : this.state.filter_type === 'equities' ? (
+                  ) : filter_type === 'equities' ? (
                     'store'
-                  ) : this.state.filter_type === 'expenses' ? (
+                  ) : filter_type === 'expenses' ? (
                     'account_balance_wallet'
-                  ) : this.state.filter_type === 'incomes' ? (
+                  ) : filter_type === 'incomes' ? (
                     'attach_money'
                   ) : (
                     'filter_alt'
@@ -244,46 +221,8 @@ export class Activity extends Component {
                     label : 'Incomes',
                   },
                 ]}
-                value={this.state.filter_type}
+                value={filter_type}
               />
-              {/* <Flex>
-                <div
-                  className={`option${this.state.filter_type === 'journal' ? ' activate' : ''}`}
-                  onClick={() => this.onFilterChangeHandler('filter_type', 'journal')}
-                >
-                  <i className='material-icons p-right-1'>collections_bookmark</i>
-                  Journal
-                </div>
-                <div
-                  className={`option${this.state.filter_type === 'expenses' ? ' activate' : ''}`}
-                  onClick={() => this.onFilterChangeHandler('filter_type', 'expenses')}
-                >
-                  <i className='material-icons p-right-1'>local_grocery_store</i>
-                  Expresses
-                </div>
-                <div
-                  className={`option${this.state.filter_type === 'assets' ? ' activate' : ''}`}
-                  onClick={() => this.onFilterChangeHandler('filter_type', 'assets')}
-                >
-                  <i className='material-icons p-right-1'>money</i>
-                  Cash n Bank
-                </div>
-                <div
-                  className={`option${this.state.filter_type === 'liabilities' ? ' activate' : ''}`}
-                  onClick={() => this.onFilterChangeHandler('filter_type', 'liabilities')}
-                >
-                  <i className='material-icons p-right-1'>receipt</i>
-                  Payrolls
-                </div>
-                <div
-                  className={`option${this.state.filter_type === 'incomes' ? ' activate' : ''}`}
-                  onClick={() => this.onFilterChangeHandler('filter_type', 'incomes')}
-                >
-                  <i className='material-icons p-right-1'>score</i>
-                  Incomes
-                </div>
-              </Flex> */}
-              {/* <div className='widget-header'><i className='material-icons p-right'>filter</i> Filter</div> */}
             </Widget>
             <WHeader>Date Filter</WHeader>
             {/* Calander Controller */}
@@ -304,23 +243,26 @@ export class Activity extends Component {
                     label : 'Entry Date',
                   },
                 ]}
-                value={this.state.filter_date_type}
+                value={filter_date_type}
               />
             </Widget>
             {/* Calander */}
             <Widget>
-              {this.state.filter_date === 'today' || this.state.filter_date === 'custom_single' ? (
+              {filter_date === 'today' || filter_date === 'custom_single' ? (
                 <DayPickerSingleDateController
-                  date={this.state.end_date}
+                  date={end_date}
                   focused={true}
-                  onDateChange={date => this.onSingleDateFilterChangeHandler('end_date', date)}
+                  onDateChange={date => {
+                    this.props.modifySettings({ key: filter_date, data: 'custom_single' })
+                    this.onFilterChangeHandler('end_date', date)
+                  }}
                   displayFormat='D MMM'
                   numberOfMonths={1}
                   small
                   noBorder
                   isOutsideRange={() => false}
                   transitionDuration={0}
-                  initialVisibleMonth={() => this.state.end_date}
+                  initialVisibleMonth={() => end_date}
                   isDayHighlighted={date =>
                     date.year() === moment().year() &&
                     date.month() === moment().month() &&
@@ -338,16 +280,21 @@ export class Activity extends Component {
                 />
               ) : (
                 <DayPickerRangeController
-                  startDate={this.state.start_date}
-                  endDate={this.state.end_date}
-                  onDatesChange={({ startDate, endDate }) => this.onDateFilterChangeHandler(startDate, endDate)}
+                  startDate={start_date}
+                  endDate={end_date}
+                  onDatesChange={async ({ startDate, endDate }) => {
+                    await this.props.modifySettings({ key: 'start_date', data: startDate })
+                    endDate && (await this.props.modifySettings({ key: 'end_date', data: endDate }))
+
+                    this.reFetchJournal()
+                  }}
                   focusedInput={this.state.focused_input}
                   onFocusChange={focusedInput =>
                     this.setState({ focused_input: focusedInput ? focusedInput : 'startDate' })}
                   displayFormat='D MMM'
                   maxDate={moment()}
                   transitionDuration={0}
-                  initialVisibleMonth={() => this.state.end_date}
+                  initialVisibleMonth={() => end_date}
                   isDayHighlighted={date =>
                     date.year() === moment().year() &&
                     date.month() === moment().month() &&
@@ -373,14 +320,14 @@ export class Activity extends Component {
                   name='filter_date'
                   radius='99rem'
                   style={{ marginLeft: '0' }}
-                  onChange={({ target }) => this.onDateFilterHandler(!target.checked ? 'custom' : 'custom_single')}
-                  checked={this.state.filter_date === 'today' || this.state.filter_date === 'custom_single'}
+                  onChange={isChecked => this.onDateFilterHandler(!isChecked ? 'custom' : 'custom_single')}
+                  value={filter_date === 'today' || filter_date === 'custom_single'}
                 />
               </Button>
               <Button
                 chip
                 small
-                className={`m-0${this.state.filter_date === 'today' ? ' activate' : ''}`}
+                className={`m-0${filter_date === 'today' ? ' activate' : ''}`}
                 onClick={() => this.onDateFilterHandler('today')}
               >
                 Today
@@ -388,7 +335,7 @@ export class Activity extends Component {
               <Button
                 chip
                 small
-                className={`m-0${this.state.filter_date === '3_days' ? ' activate' : ''}`}
+                className={`m-0${filter_date === '3_days' ? ' activate' : ''}`}
                 onClick={() => this.onDateFilterHandler('3_days')}
               >
                 3 Days
@@ -396,7 +343,7 @@ export class Activity extends Component {
               <Button
                 chip
                 small
-                className={`m-0${this.state.filter_date === 'week' ? ' activate' : ''}`}
+                className={`m-0${filter_date === 'week' ? ' activate' : ''}`}
                 onClick={() => this.onDateFilterHandler('week')}
               >
                 Week
@@ -404,7 +351,7 @@ export class Activity extends Component {
               <Button
                 chip
                 small
-                className={`m-0${this.state.filter_date === 'month' ? ' activate' : ''}`}
+                className={`m-0${filter_date === 'month' ? ' activate' : ''}`}
                 onClick={() => this.onDateFilterHandler('month')}
               >
                 Month
@@ -412,7 +359,7 @@ export class Activity extends Component {
               <Button
                 chip
                 small
-                className={`m-0${this.state.filter_date === 'year' ? ' activate' : ''}`}
+                className={`m-0${filter_date === 'year' ? ' activate' : ''}`}
                 onClick={() => this.onDateFilterHandler('year')}
               >
                 Year
@@ -427,7 +374,7 @@ export class Activity extends Component {
                       Print This
                     </Button>
                   )}
-                  content={() => this.testRef}
+                  content={() => this.journlToPrintRef}
                 />
                 <Button
                   icon='post_add'
@@ -444,6 +391,9 @@ export class Activity extends Component {
         ) : (
           <b style={{ padding: '10rem', color: '#dd3838' }}>{this.props.status.message}</b>
         )}
+        <HiddenPrint ref={el => (this.journlToPrintRef = el)}>
+          <ToPrint />
+        </HiddenPrint>
 
         {modal_new_journal && (
           <Modal noPadding modalClose={() => this.onChangeHandler('modal_new_journal', false)}>
@@ -522,26 +472,83 @@ export class Activity extends Component {
   }
 }
 
+const HiddenPrint = styled.div`
+  @media only screen {
+    display: none;
+  }
+  @media only print {
+    display: initial;
+  }
+`
+
 const Flex = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
 `
+const FloatRight = styled.span`float: right;`
+
+const Note = styled.span`
+  font-size: 85%;
+  color: #bbb;
+`
+const Table = styled.table`
+  width: 100%;
+  border-spacing: 0;
+
+  thead {
+    tr {
+      background-color: #eee;
+
+      th {
+        text-align: left;
+        padding: 1rem 0.4rem;
+        color: #000;
+
+        &:first-child {
+          padding-left: 3rem;
+        }
+        &:last-child {
+          padding-right: 3rem;
+        }
+      }
+    }
+  }
+
+  tbody {
+    td {
+      padding: 1rem 0.4rem;
+
+      &:first-child {
+        padding-left: 3rem;
+      }
+      &:last-child {
+        padding-right: 3rem;
+      }
+    }
+  }
+
+  .alignRight {
+    text-align: right;
+  }
+`
 
 const mapStateToProps = state => ({
-  journal : state.journal.journal,
-  account : state.account.account,
-  status  : state.branch.status,
+  journal  : state.journal.journal,
+  settings : state.settings,
+  account  : state.account.account,
+  status   : state.branch.status,
   // settings : state.settings,
 })
 const mapDispatchToProps = dispatch => ({
-  fetchJournal  : payload => dispatch(journalAction.send.fetch(payload)),
-  createJournal : payload => dispatch(journalAction.send.create(payload)),
-  fetchAccount  : payload => dispatch(accountAction.send.fetch(payload)),
+  fetchJournal   : payload => dispatch(journalAction.send.fetch(payload)),
+  createJournal  : payload => dispatch(journalAction.send.create(payload)),
+  fetchAccount   : payload => dispatch(accountAction.send.fetch(payload)),
+  modifySettings : payload => dispatch(settingsAction.save.modify(payload)),
   // modifyBranch     : payload => dispatch(branchAction.send.modify(payload)),
   // activateBranch   : payload => dispatch(branchAction.send.activate(payload)),
   // deactivateBranch : payload => dispatch(branchAction.send.deactivate(payload)),
   // removeBranch     : payload => dispatch(branchAction.send.remove(payload)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Activity)
+export default connect(mapStateToProps, mapDispatchToProps)(JournalWidget)
