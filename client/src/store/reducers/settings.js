@@ -4,7 +4,7 @@ import moment from 'moment'
 import { SETTINGS } from '../constants'
 
 const initialState = {
-  selected_branch    : '',
+  selected_branch    : '5f5fa2baae87662ac405baef',
   sidebar_collapse   : false,
   selected_branch    : '',
 

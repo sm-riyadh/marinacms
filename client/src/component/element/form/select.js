@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components/macro'
 
-const Select = ({ label, options, icon, onChange, noEmpty, value = '' }) => {
+const Select = ({ label, options, icon, white, onChange, noEmpty, value = '' }) => {
   const [ isEmpty, setIsEmpty ] = useState(value === '')
   const [ isFocus, setIsFocus ] = useState(false)
 
   useEffect(() => setIsEmpty(value === ''), [ value ])
 
   return (
-    <LabelStyled>
+    <LabelStyled white={white}>
       <SelectStyled
         onChange={({ target }) => onChange(target.value)}
         value={value}
@@ -33,7 +33,7 @@ const Select = ({ label, options, icon, onChange, noEmpty, value = '' }) => {
 
 const SelectStyled = styled.select`
   width: ${({ icon }) => (icon ? 'calc(100% - 3rem)' : '100%')};
-  background: #e1e1e1;
+  background: inherit;
   color: #262626;
   font-size: 100%;
   padding-top: 1.3rem;
@@ -46,9 +46,10 @@ const SelectStyled = styled.select`
   :focus {
     border-color: #a25eda;
   }
-`
+  `
 const LabelStyled = styled.label`
   background: #e1e1e1;
+  background-color: ${({ white }) => white && '#ffffff'};
   width: 100%;
   color: #aaa;
   display: inline-flex;

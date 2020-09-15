@@ -1,18 +1,26 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 
 import { Button, Grid, Form, Input, Checkbox } from '../../../component/element'
 
 import Modal from '../../../component/layout/modal/modal'
 
-const AccountCreateModal = ({ isModalOpen, modalClose, createAccount, type, path, location, ...props }) => {
+const AccountCreateModal = ({ isModalOpen, modalClose, createAccount, type, path, location, selectedBranch, ...props }) => {
   const [ name, setName ] = useState('')
   const [ isFolder, setIsFolder ] = useState(false)
+
+  useEffect(() => {
+    return () => {
+      setName('')
+      setIsFolder(false)
+    }
+  }, [isModalOpen])
 
   const onSubmit = e => {
     e.preventDefault()
 
+
     createAccount({
-      branch   : '5efdede059266615d82e2f24',
+      branch   : selectedBranch,
       name,
       type,
       path     : [ path ],

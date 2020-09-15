@@ -6,7 +6,7 @@ import { WidgetBar, Widget, WHeader } from '../../layout/widgetBar/widgetBar'
 
 const navBar = ({ navigations = [] }) => {
   return (
-    <WidgetBar size='16vw' backgroundColor='#fafafa'>
+    <WidgetBar size='23.5rem'>
       <Widget justify='flex-start'>
         <NavHeader>
           <CollapseButton>
@@ -15,7 +15,7 @@ const navBar = ({ navigations = [] }) => {
           Placeholder
         </NavHeader>
       </Widget>
-      <Widget justify='flex-start'>
+      <Widget justify='flex-start' padding='0.5rem 1rem'>
         <ListContainer>
           {navigations.map(({ isLabel, link, name, icon }) => {
             if (isLabel) return <Label>{name}</Label>
@@ -34,8 +34,6 @@ const navBar = ({ navigations = [] }) => {
 }
 
 const NavHeader = styled.div`
-  font-size: 90%;
-
   width: 100%;
   color: #555;
 
@@ -48,7 +46,7 @@ const NavHeader = styled.div`
 const CollapseButton = styled.button`
   display: inline-flex;
   align-items: center;
-  color: #000;
+  color: #2d2d2d;
   background-color: none;
 
   font-size: 145%;
@@ -61,7 +59,7 @@ const ListContainer = styled.ul`list-style: none;`
 const Label = styled.li`
   text-decoration: none;
   font-size: 75%;
-  color: #888;
+  color: #a4a4a4;
   margin-left: 0.2rem;
   margin-top: 0.8rem;
 `
@@ -74,8 +72,9 @@ const List = styled.li`
   align-items: center;
   margin: 0.2rem 0;
   padding: 0.8rem 0.6rem;
+  white-space: nowrap;
 
-  color: #333;
+  color: #2d2d2d;
   border-radius: 0.6rem;
 
   :hover {

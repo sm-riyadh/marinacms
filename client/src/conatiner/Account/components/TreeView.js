@@ -1,90 +1,79 @@
 import React, { Fragment } from 'react'
+import styled from 'styled-components'
+import _times from 'lodash.times'
+
+import { Button } from '../../../component/element'
 
 const TreeView = ({
   root,
   base,
   data,
-  // parentId,
   hoverOn,
   setHoverOn,
-  // parent,
-  // children,
-  // setChildren,
-  // setParent,
   toggleModalSettings,
   toggleModalCreate,
+  indicator = false,
   spacing = 0,
 }) =>
   base.map(item => {
-    const id = data.find(e => e.id === item).id
-    const name = data.find(e => e.id === item).name
-    const isFolder = data.find(e => e.id === item).isFolder
+    const account = data.find(e => e.id === item)
+
+    const id = account.id
+    const name = account.name
+    const isFolder = account.isFolder
+    const isSystem = account.isSystem
 
     return (
       <Fragment key={id}>
-        <tr
-          onMouseEnter={() => {
-            setHoverOn(id)
-            // if (isFolder) {
-            //   setParent(id)
-            //   setChildren('')
-            // } else {
-            //   setParent(parentId)
-            //   setChildren(id)
-            // }
-          }}
-        >
+        <tr onMouseEnter={() => setHoverOn(id)}>
           <td>
-            <span>{'\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'.repeat(spacing)}</span>
-            {!isFolder ? <b>{name}</b> : <span>{name}</span>}
+            <Container>
+              {indicator &&
+                _times(spacing, () => (
+                  <Fragment>
+                    <LineIndicator />
+                    {'\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'}
+                  </Fragment>
+                ))}
+              {!isFolder ? (
+                <AccountName>{name} {isSystem && " 🔐"}</AccountName>
+              ) : (
+                <FolderName>
+                  <i className='material-icons'>folder</i>
+                  {name} {isSystem && " 🔐"}
+                </FolderName>
+              )}
+            </Container>
           </td>
           <td style={{ maxWidth: '3rem' }} className='txtRight'>
             0
-            {/* {isFolder &&
-          id === parent && (
-            <Fragment>
-              <button style={{ paddingTop: '0', paddingBottom: '0' }} className='btn btn-small btn-rounded grey'>
-                <b> + New </b>
-              </button>
-              <button
-                style={{ paddingTop: '0', paddingBottom: '0' }}
-                className='btn btn-small btn-rounded grey'
-                onClick={() => toggleModalSettings(id)}
-              >
-                <b> Edit </b>
-              </button>
-            </Fragment>
-          )} */}
-            {isFolder &&
+            {true && isFolder &&
             id === hoverOn && (
-              <Fragment>
-                <button
-                  style={{ paddingTop: '0', paddingBottom: '0' }}
-                  className='btn btn-small btn-rounded grey'
-                  onClick={() => toggleModalCreate(id)}
-                >
-                  <b> + New </b>
-                </button>
-              </Fragment>
+              <Button
+                small
+                chip
+                style={{
+                  margin : '0',
+                }}
+                icon='add'
+                onClick={() => toggleModalCreate(id)}
+              >
+                New
+              </Button>
             )}
-            {id === hoverOn && (
-              <button
-                style={{ paddingTop: '0', paddingBottom: '0' }}
-                className='btn btn-small btn-rounded grey'
+            {!isSystem && id === hoverOn && (
+              <Button
+                small
+                chip
+                style={{
+                  margin : '0',
+                }}
+                icon='edit'
                 onClick={() => toggleModalSettings(id)}
               >
-                <b> Edit </b>
-              </button>
+                Edit
+              </Button>
             )}
-            {/* {id === children && (
-            <button
-              style={{ paddingTop: '0', paddingBottom: '0' }}
-              className='btn btn-small btn-rounded grey'
-              onClick={() => toggleModalSettings(id)}
-            >
-              <b> Edit </b>
-            </button>
-          )} */}
           </td>
         </tr>
         {root[item] ? (
@@ -93,13 +82,9 @@ const TreeView = ({
             base={root[item]}
             data={data}
             spacing={spacing + 1}
-            // parentId={isFolder ? id : parentId}
             hoverOn={hoverOn}
             setHoverOn={setHoverOn}
-            // parent={parent}
-            // children={children}
-            // setParent={setParent}
-            // setChildren={setChildren}
+            indicator={true}
             toggleModalSettings={toggleModalSettings}
             toggleModalCreate={toggleModalCreate}
           />
@@ -109,5 +94,36 @@ const TreeView = ({
       </Fragment>
     )
   })
+
+const Container = styled.span`
+  display: flex;
+  align-items: center;
+`
+const LineIndicator = styled.span`
+  border-left: 0.1rem dashed #aaa;
+  margin-left: 0.2rem;
+  padding: 1.4rem 0;
+`
+const AccountName = styled.span`
+  display: inline-flex;
+  align-items: center;
+
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 0.8rem 0;
+`
+const FolderName = styled.span`
+  display: inline-flex;
+  align-items: center;
+
+  font-size: 1.2rem;
+  color: #666;
+  padding: 0.8rem 0;
+
+  .material-icons {
+    font-size: 1.4rem;
+    margin-right: 0.5rem;
+  }
+`
 
 export default TreeView

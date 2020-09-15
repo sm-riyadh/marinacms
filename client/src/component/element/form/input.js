@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components/macro'
 
-const Input = ({ label, type: initialType = 'text', icon, onChange, value = '' }) => {
+const Input = ({ label, type: initialType = 'text', white, icon, onChange, value = '' }) => {
   const [ isEmpty, setIsEmpty ] = useState(value === '')
   const [ isFocus, setIsFocus ] = useState(false)
   const [ type, setType ] = useState(initialType)
@@ -14,7 +14,7 @@ const Input = ({ label, type: initialType = 'text', icon, onChange, value = '' }
   }
 
   return (
-    <LabelStyled>
+    <LabelStyled white={white}>
       <InputStyled
         type={type}
         onChange={({ target }) => onChange(target.value)}
@@ -53,9 +53,11 @@ const InputStyled = styled.input`
 const LabelStyled = styled.label`
   width: 100%;
   color: #aaa;
+  background-color: ${({ white }) => white && '#ffffff'};
   display: inline-flex;
   flex-direction: column;
   padding: 0.5rem 0;
+  padding-right: 1rem;
   margin: 0.5rem 0;
   border: 0.3rem solid #e1e1e1;
   border-radius: 0.8rem;

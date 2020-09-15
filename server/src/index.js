@@ -12,6 +12,8 @@ import journal from './routes/journal'
 import account from './routes/account'
 import branch from './routes/branch'
 import hierarchy from './routes/hierarchy'
+import employee from './routes/employee'
+import inventory from './routes/inventory'
 
 const app = express()
 const server = createServer(app)
@@ -46,10 +48,9 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(journal)
-app.use(account)
-app.use(branch)
-app.use(hierarchy)
+const routes = [ journal, account, branch, hierarchy, employee, inventory ]
+
+routes.map(route => app.use(route))
 
 // Server Config
 

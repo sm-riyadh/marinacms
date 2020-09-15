@@ -30,9 +30,9 @@ app.get(`/${url}/:id`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.fetchDetails({ id })
+    await Validator.fetchOne({ id })
 
-    const data = await Ops.fetchDetails({ id })
+    const data = await Ops.fetchOne({ id })
 
     return res.send(data)
   } catch (error) {

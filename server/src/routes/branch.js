@@ -25,9 +25,9 @@ app.get(`/${url}/:id`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.fetchDetails({ id, isPrimary })
+    await Validator.fetchOne({ id })
 
-    const data = await Ops.fetchDetails({ id, isPrimary })
+    const data = await Ops.fetchOne({ id })
 
     return res.send(data)
   } catch (error) {
@@ -39,13 +39,13 @@ app.get(`/${url}/:id`, async (req, res, next) => {
 
 app.post(`/${url}`, async (req, res, next) => {
   try {
-    const { name } = req.body
+    const { name, isPrimary } = req.body
 
-    await Validator.create({ name })
+    await Validator.create({ name, isPrimary })
 
-    const data = await Ops.create({ name })
+    const data = await Ops.create({ name, isPrimary })
 
-    res.io.sockets.emit(socketLink, { action: 'add', data })
+    // res.io.sockets.emit(socketLink, { action: 'add', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -57,13 +57,13 @@ app.post(`/${url}`, async (req, res, next) => {
 app.patch(`/${url}/:id`, async (req, res, next) => {
   try {
     const { id } = req.params
-    const { name } = req.body
+    const { name, isPrimary } = req.body
 
     await Validator.modify({ id, name, isPrimary })
 
     const data = await Ops.modify({ id, name, isPrimary })
 
-    res.io.sockets.emit(socketLink, { action: 'modify', data })
+    // res.io.sockets.emit(socketLink, { action: 'modify', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -78,7 +78,7 @@ app.patch(`/${url}/:id/activate`, async (req, res, next) => {
 
     const data = await Ops.activate({ id })
 
-    res.io.sockets.emit(socketLink, { action: 'activate', data })
+    // res.io.sockets.emit(socketLink, { action: 'activate', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -92,7 +92,7 @@ app.patch(`/${url}/:id/deactivate`, async (req, res, next) => {
 
     const data = await Ops.deactivate({ id })
 
-    res.io.sockets.emit(socketLink, { action: 'deactivate', data })
+    // res.io.sockets.emit(socketLink, { action: 'deactivate', data })
     return res.send(data)
   } catch (error) {
     return next(error)
@@ -108,7 +108,7 @@ app.delete(`/${url}/:id`, async (req, res, next) => {
 
     const data = await Ops.remove({ id })
 
-    res.io.sockets.emit(socketLink, { action: 'remove', data })
+    // res.io.sockets.emit(socketLink, { action: 'remove', data })
     return res.send(data)
   } catch (error) {
     return next(error)

@@ -5,7 +5,7 @@ import Account from '../../models/account'
 
 // CODE: Fetch
 
-const fetchDetails = async ({ id } = {}) => {
+const fetchOne = async ({ id } = {}) => {
   if (!Validator.isMongoId(id)) throw 'Wrong ID'
 }
 
@@ -20,7 +20,7 @@ const create = async ({ name } = {}) => {
 const modify = async ({ id, name, isPrimary } = {}) => {
   if (!Validator.isMongoId(id)) throw 'Wrong ID'
   if (!Validator.isAlphanumeric(name.split(' ').join(''))) throw 'Only letters and numbers are allowed for name'
-  if (!Validator.isBoolean(isPrimary)) throw 'isPrimary must be a boolean'
+  if (!Validator.isBoolean(isPrimary + '')) throw 'isPrimary must be a boolean'
 }
 
 const activate = async ({ id } = {}) => {
@@ -42,4 +42,4 @@ const remove = async ({ id } = {}) => {
   if ((await Account.fetchNonEmpty(branch.name)).length !== 0) throw 'Branch can not be removed'
 }
 
-export default { fetchDetails, create, modify, activate, deactivate, remove }
+export default { fetchOne, create, modify, activate, deactivate, remove }

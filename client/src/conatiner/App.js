@@ -3,6 +3,8 @@ import { Switch, Route } from 'react-router-dom'
 
 import Home from './Home/Home'
 
+import Titlebar from '../component/layout/titlebar/titlebar'
+
 // import electron from 'electron'
 
 // const electron = window.require('electron')
@@ -12,6 +14,7 @@ import Home from './Home/Home'
 function App() {
   return (
     <Fragment>
+      <Titlebar />
       <Switch>
         <Route path='/' component={Home} />
       </Switch>

@@ -3,8 +3,6 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import styled from 'styled-components'
 
-// import { ActivityBar } from '../../component/layout'
-// import { Modal, Container, Card, Text, Placeholder } from '../../component'
 import { accountAction, hierarchyAction } from '../../store/actions'
 
 import 'react-dates/initialize'
@@ -14,8 +12,6 @@ import { DayPickerSingleDateController, DayPickerRangeController } from 'react-d
 import Modal from '../../component/layout/modal/modal'
 import { Button, Grid, Form, Textarea, Input, Select, Checkbox } from '../../component/element'
 
-// import BranchEntry from './components/BranchCreate'
-// import BranchSettings from './components/BranchSettings'
 import TreeView from './components/TreeView'
 import AccountCreateModal from './components/AccountCreateModal'
 
@@ -29,6 +25,7 @@ export class Account extends Component {
     parent            : '',
     children          : '',
     selected_item     : '',
+    selected_type     : '',
     selected_location : [],
 
     hierarchy         : {
@@ -56,8 +53,6 @@ export class Account extends Component {
   }
 
   onChangeHandler = (name, action) => this.setState({ [name]: action })
-  // toggleModal = (name, action) => this.setState({ [name]: action })
-  // setJournalIndex = index => this.setState({ journal_index: index })
 
   render() {
     const { modal_new_account } = this.state
@@ -69,31 +64,251 @@ export class Account extends Component {
           <Table className='table-card'>
             <thead>
               <tr>
-                <th>Name</th>
-                <th className='txtRight'>Balance</th>
+                <th>Assets</th>
+                <th className='txtRight'>
+                  <Button
+                    small
+                    chip
+                    icon='add'
+                    onClick={() => {
+                      this.onChangeHandler('modal_new_account', true)
+                      this.onChangeHandler('selected_location', 'base')
+                      this.onChangeHandler('selected_type', 'assets')
+                    }}
+                  >
+                    New
+                  </Button>
+                </th>
               </tr>
             </thead>
-            <tbody
-              onMouseLeave={() => {
-                this.setState({ hover_on: '' })
-                // this.setState({ parent: '' })
-                // this.setState({ children: '' })
-              }}
-            >
-              {this.props.account.length !== 0 &&
-              this.props.hierarchy.assets.base.length !== 0 && (
+            <tbody onMouseLeave={() => this.setState({ hover_on: '' })}>
+              {account.length !== 0 &&
+              hierarchy.assets.base.length !== 0 && (
                 <TreeView
                   accountType='assets'
-                  root={this.props.hierarchy.assets}
-                  base={this.props.hierarchy.assets.base}
-                  data={this.props.account}
+                  root={hierarchy.assets}
+                  base={hierarchy.assets.base}
+                  data={account}
                   location={[ 'assets' ]}
                   hoverOn={this.state.hover_on}
-                  // parent={this.state.parent}
-                  // children={this.state.children}
                   setHoverOn={id => this.onChangeHandler('hover_on', id)}
-                  // setParent={id => this.onChangeHandler('parent', id)}
-                  // setChildren={id => this.onChangeHandler('children', id)}
+                  setSelectItem={id => this.onChangeHandler('selected_item', id)}
+                  toggleModalSettings={id => {
+                    this.onChangeHandler('modal_settings', true)
+                    this.onChangeHandler('selected_item', id)
+                  }}
+                  toggleModalCreate={location => {
+                    this.onChangeHandler('modal_new_account', true)
+                    this.onChangeHandler('selected_location', location)
+                    this.onChangeHandler('selected_type', 'assets')
+                  }}
+                />
+              )}
+              <tr>
+                <td className='txtRight' style={{ backgroundColor: '#eeeeee' }}>
+                  <b>Total</b>
+                </td>
+                <td className='txtRight' style={{ backgroundColor: '#eeeeee' }}>
+                  <span>৳</span> 0
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Section>
+        <Section>
+          <Table className='table-card'>
+            <thead>
+              <tr>
+                <th>Liabilities</th>
+                <th className='txtRight'>
+                  <Button
+                    small
+                    chip
+                    icon='add'
+                    onClick={() => {
+                      this.onChangeHandler('modal_new_account', true)
+                      this.onChangeHandler('selected_location', 'base')
+                      this.onChangeHandler('selected_type', 'liabilities')
+                    }}
+                  >
+                    New
+                  </Button>
+                </th>
+              </tr>
+            </thead>
+            <tbody onMouseLeave={() => this.setState({ hover_on: '' })}>
+              {account.length !== 0 &&
+              hierarchy.liabilities.base.length !== 0 && (
+                <TreeView
+                  accountType='liabilities'
+                  root={hierarchy.liabilities}
+                  base={hierarchy.liabilities.base}
+                  data={account}
+                  location={[ 'liabilities' ]}
+                  hoverOn={this.state.hover_on}
+                  setHoverOn={id => this.onChangeHandler('hover_on', id)}
+                  setSelectItem={id => this.onChangeHandler('selected_item', id)}
+                  toggleModalSettings={id => {
+                    this.onChangeHandler('modal_settings', true)
+                    this.onChangeHandler('selected_item', id)
+                  }}
+                  toggleModalCreate={location => {
+                    this.onChangeHandler('modal_new_account', true)
+                    this.onChangeHandler('selected_location', location)
+                  }}
+                />
+              )}
+              <tr>
+                <td className='txtRight' style={{ backgroundColor: '#eeeeee' }}>
+                  <b>Total</b>
+                </td>
+                <td className='txtRight' style={{ backgroundColor: '#eeeeee' }}>
+                  <span>৳</span> 0
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Section>
+        <Section>
+          <Table className='table-card'>
+            <thead>
+              <tr>
+                <th>Equities</th>
+                <th className='txtRight'>
+                  <Button
+                    small
+                    chip
+                    icon='add'
+                    onClick={() => {
+                      this.onChangeHandler('modal_new_account', true)
+                      this.onChangeHandler('selected_location', 'base')
+                      this.onChangeHandler('selected_type', 'equities')
+                    }}
+                  >
+                    New
+                  </Button>
+                </th>
+              </tr>
+            </thead>
+            <tbody onMouseLeave={() => this.setState({ hover_on: '' })}>
+              {account.length !== 0 &&
+              hierarchy.equities.base.length !== 0 && (
+                <TreeView
+                  accountType='equities'
+                  root={hierarchy.equities}
+                  base={hierarchy.equities.base}
+                  data={account}
+                  location={[ 'equities' ]}
+                  hoverOn={this.state.hover_on}
+                  setHoverOn={id => this.onChangeHandler('hover_on', id)}
+                  setSelectItem={id => this.onChangeHandler('selected_item', id)}
+                  toggleModalSettings={id => {
+                    this.onChangeHandler('modal_settings', true)
+                    this.onChangeHandler('selected_item', id)
+                  }}
+                  toggleModalCreate={location => {
+                    this.onChangeHandler('modal_new_account', true)
+                    this.onChangeHandler('selected_location', location)
+                  }}
+                />
+              )}
+              <tr>
+                <td className='txtRight' style={{ backgroundColor: '#eeeeee' }}>
+                  <b>Total</b>
+                </td>
+                <td className='txtRight' style={{ backgroundColor: '#eeeeee' }}>
+                  <span>৳</span> 0
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Section>
+        <Section>
+          <Table className='table-card'>
+            <thead>
+              <tr>
+                <th>Expenses</th>
+                <th className='txtRight'>
+                  <Button
+                    small
+                    chip
+                    icon='add'
+                    onClick={() => {
+                      this.onChangeHandler('modal_new_account', true)
+                      this.onChangeHandler('selected_location', 'base')
+                      this.onChangeHandler('selected_type', 'expenses')
+                    }}
+                  >
+                    New
+                  </Button>
+                </th>
+              </tr>
+            </thead>
+            <tbody onMouseLeave={() => this.setState({ hover_on: '' })}>
+              {account.length !== 0 &&
+              hierarchy.expenses.base.length !== 0 && (
+                <TreeView
+                  accountType='expenses'
+                  root={hierarchy.expenses}
+                  base={hierarchy.expenses.base}
+                  data={account}
+                  location={[ 'expenses' ]}
+                  hoverOn={this.state.hover_on}
+                  setHoverOn={id => this.onChangeHandler('hover_on', id)}
+                  setSelectItem={id => this.onChangeHandler('selected_item', id)}
+                  toggleModalSettings={id => {
+                    this.onChangeHandler('modal_settings', true)
+                    this.onChangeHandler('selected_item', id)
+                  }}
+                  toggleModalCreate={location => {
+                    this.onChangeHandler('modal_new_account', true)
+                    this.onChangeHandler('selected_location', location)
+                  }}
+                />
+              )}
+              <tr>
+                <td className='txtRight' style={{ backgroundColor: '#eeeeee' }}>
+                  <b>Total</b>
+                </td>
+                <td className='txtRight' style={{ backgroundColor: '#eeeeee' }}>
+                  <span>৳</span> 0
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Section>
+        <Section>
+          <Table className='table-card'>
+            <thead>
+              <tr>
+                <th>Incomes</th>
+                <th className='txtRight'>
+                  <Button
+                    small
+                    chip
+                    icon='add'
+                    onClick={() => {
+                      this.onChangeHandler('modal_new_account', true)
+                      this.onChangeHandler('selected_location', 'base')
+                      this.onChangeHandler('selected_type', 'incomes')
+                    }}
+                  >
+                    New
+                  </Button>
+                </th>
+              </tr>
+            </thead>
+            <tbody onMouseLeave={() => this.setState({ hover_on: '' })}>
+              {account.length !== 0 &&
+              hierarchy.incomes.base.length !== 0 && (
+                <TreeView
+                  accountType='incomes'
+                  root={hierarchy.incomes}
+                  base={hierarchy.incomes.base}
+                  data={account}
+                  location={[ 'incomes' ]}
+                  hoverOn={this.state.hover_on}
+                  setHoverOn={id => this.onChangeHandler('hover_on', id)}
                   setSelectItem={id => this.onChangeHandler('selected_item', id)}
                   toggleModalSettings={id => {
                     this.onChangeHandler('modal_settings', true)
@@ -119,12 +334,12 @@ export class Account extends Component {
         <AccountCreateModal
           isModalOpen={modal_new_account}
           modalClose={() => this.onChangeHandler('modal_new_account', false)}
-          // selectedAccount={this.props.account.find(e => e.id === this.state.selected_location)}
           location={this.state.selected_location}
           createAccount={this.props.createAccount}
           company='5ea95979dc97443198df4ddf'
-          type='assets'
-          path='assets'
+          type={this.state.selected_type}
+          path={this.state.selected_type}
+          selectedBranch={this.props.settings.selected_branch}
         />
       </Fragment>
     )
@@ -146,12 +361,14 @@ const Table = styled.table`
 
   thead {
     tr {
-      background-color: #eee;
-
       th {
         text-align: left;
         padding: 1rem 0.4rem;
-        color: #000;
+        color: #aaa;
+        background-color: #f6f6f6;
+        position: sticky;
+        top: -4rem;
+        /* border-bottom: 0.2rem solid #eee; */
 
         &:first-child {
           padding-left: 3rem;
@@ -165,12 +382,16 @@ const Table = styled.table`
 
   tbody {
     tr {
+      &.line-indicator {
+        border-left: 0.1rem solid #000;
+      }
+
       &:nth-child(even) {
-        background-color: #f2f2f2;
+        /* background-color: #f2f2f2; */
       }
 
       td {
-        padding: 1rem 0.4rem;
+        /* padding: 1rem 0.4rem; */
         /* border: 0.1rem solid #ccc; */
         /* border-width: 0.1rem 0; */
 
@@ -192,6 +413,7 @@ const Table = styled.table`
 const mapStateToProps = state => ({
   account   : state.account.account,
   hierarchy : state.hierarchy.hierarchy,
+  settings : state.settings,
   // settings : state.settings,
   // status   : state.branch.status,
 })

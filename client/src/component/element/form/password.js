@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components/macro'
 
-const Password = ({ label, icon, peek, onChange, value = '' }) => {
+const Password = ({ label, icon, peek, white, onChange, value = '' }) => {
   const [ isEmpty, setIsEmpty ] = useState(value === '')
   const [ isFocus, setIsFocus ] = useState(false)
   const [ type, setType ] = useState('password')
@@ -11,7 +11,7 @@ const Password = ({ label, icon, peek, onChange, value = '' }) => {
   const togglePeek = () => (type === 'password' ? setType('text') : setType('password'))
 
   return (
-    <LabelStyled>
+    <LabelStyled peek={peek} white={white}>
       <InputStyled
         type={type}
         onChange={({ target }) => onChange(target.value)}
@@ -41,10 +41,11 @@ const Password = ({ label, icon, peek, onChange, value = '' }) => {
 const LabelStyled = styled.label`
   width: 100%;
   color: #aaa;
+  background-color: ${({ white }) => white && '#ffffff'};
   display: inline-flex;
   flex-direction: column;
   padding: 0.5rem 0;
-  padding-right: ${({ peek }) => '3rem'};
+  padding-right: ${({ peek }) => (peek ? '3rem' : '1rem')};
   margin: 0.5rem 0;
   border: 0.3rem solid #e1e1e1;
   border-radius: 0.8rem;

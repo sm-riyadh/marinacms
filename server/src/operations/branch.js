@@ -11,7 +11,7 @@ const fetch = async () => {
   return branch
 }
 
-const fetchDetails = async ({ id }) => {
+const fetchOne = async ({ id }) => {
   const branch = await Branch.fetchOne(id)
 
   return branch
@@ -50,6 +50,7 @@ const create = async ({ name }) => {
     branch   : id,
     type     : 'assets',
     name     : 'Bank',
+    isSystem : true,
     path     : [ 'checkable' ],
     location : checkableFolderId,
     isFolder : true,
@@ -61,6 +62,7 @@ const create = async ({ name }) => {
     name     : 'Due To',
     path     : [],
     location : 'base',
+    isSystem : true,
     isFolder : true,
   })
   const { id: receivableFolderId } = await accountOps.create({
@@ -85,6 +87,7 @@ const create = async ({ name }) => {
     name     : 'Due From',
     path     : [],
     location : 'base',
+    isSystem : true,
     isFolder : true,
   })
 
@@ -196,4 +199,4 @@ const BnterbranchDueAccounts = async (id, name, cashAccountId, dueFoldersIds) =>
   }
 }
 
-export default { fetch, fetchDetails, create, modify, activate, deactivate, remove }
+export default { fetch, fetchOne, create, modify, activate, deactivate, remove }

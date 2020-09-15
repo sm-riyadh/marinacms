@@ -6,19 +6,21 @@ const Header = ({ children }) => {
 }
 
 const HeaderStyled = styled.div`
-  position: sticky;
-  top: 0;
+  position: relative;
+  top: -0.4rem;
+  left: -0.4rem;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0.2rem;
+  padding: 0.2rem 0;
 
-  width: 100%;
-  height: 5rem;
+  width: calc(100% + 0.8rem);
+  height: 4.5rem;
 
-  background: #e0e0e0;
-  border-bottom: 0.1rem solid #ccc;
+  background: #ffffff;
+  border-radius: 0.8rem;
+  box-shadow: 0.2rem 0 0.4rem #00000020;
 `
 
 export default Header

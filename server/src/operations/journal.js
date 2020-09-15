@@ -49,7 +49,7 @@ const fetch = async ({ branch, size, page, type = 'journal', start_date, end_dat
   return journal
 }
 
-const fetchDetails = async ({ id }) => {
+const fetchOne = async ({ id }) => {
   const journal = await Journal.fetchOne(id)
 
   return journal
@@ -196,4 +196,4 @@ const typeFinder = code => {
   }
 }
 
-export default { fetch, fetchDetails, create, modify, activate, deactivate }
+export default { fetch, fetchOne, create, modify, activate, deactivate }

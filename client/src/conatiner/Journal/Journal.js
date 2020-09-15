@@ -21,7 +21,8 @@ class Journal extends Component {
             <tr>
               <th>ID</th>
               <th>Date</th>
-              <th>Destination (Source)</th>
+              <th>Destination</th>
+              <th>Source</th>
               <th className='alignRight'>Amount</th>
               <th>Comment</th>
             </tr>
@@ -40,12 +41,10 @@ class Journal extends Component {
                   </span>
                 </td>
                 <td>
-                  {credit.name} <i className='material-icons'>double_arrow</i> <FloatRight>({debit.name})</FloatRight>{' '}
-                  <br />
-                  <Note>{credit.note}</Note>{' '}
-                  <FloatRight>
-                    <Note>{debit.note}</Note>
-                  </FloatRight>
+                  {credit.name} <Note>{credit.note}</Note>
+                </td>
+                <td>
+                  {debit.name} <Note>{debit.note}</Note>
                 </td>
                 <td className='alignRight'>{amount}</td>
                 <td>{comment}</td>
@@ -57,8 +56,6 @@ class Journal extends Component {
     )
   }
 }
-
-const FloatRight = styled.span`float: right;`
 
 const Note = styled.span`
   font-size: 85%;

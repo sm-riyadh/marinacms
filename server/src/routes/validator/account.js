@@ -4,12 +4,12 @@ import Account from '../../models/account'
 
 // CODE: Fetch
 
-const fetch = async ({ branch, nonempty = false }) => {
+const fetch = async ({ branch, nonempty }) => {
   if (!Validator.isMongoId(branch)) throw 'Wrong branch ID'
-  if (nonempty && !await Validator.isBoolean(nonempty)) throw 'Non-Empty must be a boolean'
+  if (nonempty && !Validator.isBoolean(nonempty)) throw 'Non-Empty must be a boolean'
 }
 
-const fetchDetails = async ({ id }) => {
+const fetchOne = async ({ id }) => {
   if (!Validator.isMongoId(id)) throw 'Wrong ID'
 }
 
@@ -50,4 +50,4 @@ const remove = async ({ id }) => {
   if (account.transaction.length !== 0) throw 'Account can not be removed'
 }
 
-export default { fetch, fetchDetails, create, modify, activate, deactivate, remove }
+export default { fetch, fetchOne, create, modify, activate, deactivate, remove }

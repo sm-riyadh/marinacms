@@ -25,7 +25,7 @@ const fetch = async ({ branch, size, page, type, start_date, end_date } = {}) =>
     throw 'Account type must be one of this: journal, assets, liabilities, equities, expenses or incomes'
 }
 
-const fetchDetails = async ({ id } = {}) => {
+const fetchOne = async ({ id } = {}) => {
   if (!Validator.isMongoId(id)) throw 'Wrong ID'
 }
 // CODE: Create
@@ -112,4 +112,4 @@ const deactivate = async ({ id } = {}) => {
   if (!Validator.isMongoId(id)) throw 'Wrong ID'
 }
 
-export default { fetch, fetchDetails, create, modify, activate, deactivate }
+export default { fetch, fetchOne, create, modify, activate, deactivate }

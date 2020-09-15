@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 
 import { Button, Grid, Form, Input, Checkbox } from '../../../component/element'
 
@@ -6,6 +6,12 @@ import Modal from '../../../component/layout/modal/modal'
 
 const BranchCreateModal = ({ isModalOpen, modalClose, createBranch, ...props }) => {
   const [ name, setName ] = useState('')
+
+  useEffect(() => {
+    return () => {
+      setName('')
+    }
+  }, [isModalOpen])
 
   const onSubmit = e => {
     e.preventDefault()

@@ -28,10 +28,11 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "dateformat": "^3.0.3",
     "electron-is-dev": "^1.2.0",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.times": "^4.3.2",
     "material-icons": "^0.3.1",
     "moment": "^2.27.0",
     "normalize.css": "^8.0.1",
@@ -50,11 +51,11 @@
   },
   "devDependencies": {
     "csscomb": "^4.3.0",
-    "electron": "^9.0.5",
+    "electron": "^10.1.1",
     "electron-builder": "^22.7.0",
     "foreman": "^3.0.1",
     "node-sass": "^4.14.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "^3.4.3"
   },
   "build": {
     "appId": "some.id.ofyours",

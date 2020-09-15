@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 
-const Checkbox = ({ label, style, radius, icon, onChange, value = false }) => {
+const Checkbox = ({ label, style, radius, icon, white, onChange, value = false }) => {
   const handleChange = () => {
     onChange(!value)
   }
@@ -9,7 +9,14 @@ const Checkbox = ({ label, style, radius, icon, onChange, value = false }) => {
   return (
     <div>
       <LabelStyled>
-        <CheckboxStyled type='checkbox' style={style} radius={radius} onChange={handleChange} checked={value} />
+        <CheckboxStyled
+          type='checkbox'
+          style={style}
+          radius={radius}
+          white={white}
+          onChange={handleChange}
+          checked={value}
+        />
         <div className='custombox' />
         <TextStyled>{label}</TextStyled>
       </LabelStyled>
@@ -31,6 +38,7 @@ const CheckboxStyled = styled.input`
     height: 1.5rem;
 
     background-color: #ffffff;
+    background-color: ${({ white }) => white && '#eeeeee'};
     border: 0.3rem solid #e1e1e1;
     border-radius: ${({ radius }) => (radius ? radius : '0.2rem')};
     transition: transform 200ms ease;

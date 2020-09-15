@@ -10,7 +10,7 @@ import { DayPickerSingleDateController, DayPickerRangeController } from 'react-d
 
 import { WHeader, WFooter, Widget } from '../../component/layout/widgetBar/widgetBar'
 import Modal from '../../component/layout/modal/modal'
-import { Button, Grid, Form, Textarea, Input, Select, Checkbox } from '../../component/element'
+import { Card, Button, Grid, Form, Textarea, Input, Select, Checkbox } from '../../component/element'
 import ToPrint from './ToPrint'
 
 import { journalAction, accountAction, settingsAction } from '../../store/actions'
@@ -172,11 +172,12 @@ class JournalWidget extends Component {
       <Fragment>
         {journal && !status.failed ? (
           <Fragment>
-            <Widget>
+            <Widget padding='0.5rem'>
               <Select
                 name='filter_type'
                 label='Type'
                 noEmpty
+                white
                 icon={
                   filter_type === 'journal' ? (
                     'class'
@@ -226,12 +227,13 @@ class JournalWidget extends Component {
             </Widget>
             <WHeader>Date Filter</WHeader>
             {/* Calander Controller */}
-            <Widget>
+            <Widget padding='0.2rem'>
               <Select
                 name='filter_date_type'
                 label='Date type'
                 icon='date_range'
                 noEmpty
+                // white
                 onChange={e => this.onFilterChangeHandler('filter_date_type', e.target.value)}
                 options={[
                   {
@@ -247,78 +249,83 @@ class JournalWidget extends Component {
               />
             </Widget>
             {/* Calander */}
-            <Widget>
-              {filter_date === 'today' || filter_date === 'custom_single' ? (
-                <DayPickerSingleDateController
-                  date={end_date}
-                  focused={true}
-                  onDateChange={date => {
-                    this.props.modifySettings({ key: filter_date, data: 'custom_single' })
-                    this.onFilterChangeHandler('end_date', date)
-                  }}
-                  displayFormat='D MMM'
-                  numberOfMonths={1}
-                  small
-                  noBorder
-                  isOutsideRange={() => false}
-                  transitionDuration={0}
-                  initialVisibleMonth={() => end_date}
-                  isDayHighlighted={date =>
-                    date.year() === moment().year() &&
-                    date.month() === moment().month() &&
-                    date.date() === moment().date()}
-                  isDayBlocked={date =>
-                    date.year() > moment().year() ||
-                    (date.year() >= moment().year() && date.month() > moment().month()) ||
-                    (date.year() >= moment().year() &&
-                      date.month() >= moment().month() &&
-                      date.date() > moment().date())}
-                  daySize={30}
-                  firstDayOfWeek={6}
-                  reopenPickerOnClearDates
-                  hideKeyboardShortcutsPanel
-                />
-              ) : (
-                <DayPickerRangeController
-                  startDate={start_date}
-                  endDate={end_date}
-                  onDatesChange={async ({ startDate, endDate }) => {
-                    await this.props.modifySettings({ key: 'start_date', data: startDate })
-                    endDate && (await this.props.modifySettings({ key: 'end_date', data: endDate }))
+            <Card padding='0' noShadow>
+              <Widget>
+                {filter_date === 'today' || filter_date === 'custom_single' ? (
+                  <DayPickerSingleDateController
+                    date={end_date}
+                    focused={true}
+                    onDateChange={date => {
+                      this.props.modifySettings({ key: filter_date, data: 'custom_single' })
+                      this.onFilterChangeHandler('end_date', date)
+                    }}
+                    displayFormat='D MMM'
+                    numberOfMonths={1}
+                    small
+                    noBorder
+                    isOutsideRange={() => false}
+                    transitionDuration={0}
+                    initialVisibleMonth={() => end_date}
+                    isDayHighlighted={date =>
+                      date.year() === moment().year() &&
+                      date.month() === moment().month() &&
+                      date.date() === moment().date()}
+                    isDayBlocked={date =>
+                      date.year() > moment().year() ||
+                      (date.year() >= moment().year() && date.month() > moment().month()) ||
+                      (date.year() >= moment().year() &&
+                        date.month() >= moment().month() &&
+                        date.date() > moment().date())}
+                    daySize={30}
+                    firstDayOfWeek={6}
+                    reopenPickerOnClearDates
+                    hideKeyboardShortcutsPanel
+                  />
+                ) : (
+                  <DayPickerRangeController
+                    startDate={start_date}
+                    endDate={end_date}
+                    onDatesChange={async ({ startDate, endDate }) => {
+                      await this.props.modifySettings({ key: 'start_date', data: startDate })
+                      endDate && (await this.props.modifySettings({ key: 'end_date', data: endDate }))
 
-                    this.reFetchJournal()
-                  }}
-                  focusedInput={this.state.focused_input}
-                  onFocusChange={focusedInput =>
-                    this.setState({ focused_input: focusedInput ? focusedInput : 'startDate' })}
-                  displayFormat='D MMM'
-                  maxDate={moment()}
-                  transitionDuration={0}
-                  initialVisibleMonth={() => end_date}
-                  isDayHighlighted={date =>
-                    date.year() === moment().year() &&
-                    date.month() === moment().month() &&
-                    date.date() === moment().date()}
-                  isDayBlocked={date =>
-                    date.year() >= moment().year() && date.month() >= moment().month() && date.date() > moment().date()}
-                  numberOfMonths={1}
-                  small
-                  noBorder
-                  isOutsideRange={() => false}
-                  daySize={30}
-                  firstDayOfWeek={6}
-                  reopenPickerOnClearDates
-                  hideKeyboardShortcutsPanel
-                />
-              )}
-            </Widget>
+                      this.reFetchJournal()
+                    }}
+                    focusedInput={this.state.focused_input}
+                    onFocusChange={focusedInput =>
+                      this.setState({ focused_input: focusedInput ? focusedInput : 'startDate' })}
+                    displayFormat='D MMM'
+                    maxDate={moment()}
+                    transitionDuration={0}
+                    initialVisibleMonth={() => end_date}
+                    isDayHighlighted={date =>
+                      date.year() === moment().year() &&
+                      date.month() === moment().month() &&
+                      date.date() === moment().date()}
+                    isDayBlocked={date =>
+                      date.year() >= moment().year() &&
+                      date.month() >= moment().month() &&
+                      date.date() > moment().date()}
+                    numberOfMonths={1}
+                    small
+                    noBorder
+                    isOutsideRange={() => false}
+                    daySize={30}
+                    firstDayOfWeek={6}
+                    reopenPickerOnClearDates
+                    hideKeyboardShortcutsPanel
+                  />
+                )}
+              </Widget>
+            </Card>
             {/* Calander Presets */}
             <Widget justify='flex-start'>
-              <Button chip small style={{ padding: '0 1rem', paddingLeft: '0' }}>
+              <Button chip white small style={{ padding: '0 1rem', paddingLeft: '0' }}>
                 <Checkbox
                   label='Single day'
                   name='filter_date'
                   radius='99rem'
+                  white
                   style={{ marginLeft: '0' }}
                   onChange={isChecked => this.onDateFilterHandler(!isChecked ? 'custom' : 'custom_single')}
                   value={filter_date === 'today' || filter_date === 'custom_single'}
@@ -327,6 +334,7 @@ class JournalWidget extends Component {
               <Button
                 chip
                 small
+                white
                 className={`m-0${filter_date === 'today' ? ' activate' : ''}`}
                 onClick={() => this.onDateFilterHandler('today')}
               >
@@ -335,6 +343,7 @@ class JournalWidget extends Component {
               <Button
                 chip
                 small
+                white
                 className={`m-0${filter_date === '3_days' ? ' activate' : ''}`}
                 onClick={() => this.onDateFilterHandler('3_days')}
               >
@@ -343,6 +352,7 @@ class JournalWidget extends Component {
               <Button
                 chip
                 small
+                white
                 className={`m-0${filter_date === 'week' ? ' activate' : ''}`}
                 onClick={() => this.onDateFilterHandler('week')}
               >
@@ -351,6 +361,7 @@ class JournalWidget extends Component {
               <Button
                 chip
                 small
+                white
                 className={`m-0${filter_date === 'month' ? ' activate' : ''}`}
                 onClick={() => this.onDateFilterHandler('month')}
               >
@@ -359,6 +370,7 @@ class JournalWidget extends Component {
               <Button
                 chip
                 small
+                white
                 className={`m-0${filter_date === 'year' ? ' activate' : ''}`}
                 onClick={() => this.onDateFilterHandler('year')}
               >

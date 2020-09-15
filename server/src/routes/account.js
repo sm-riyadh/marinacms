@@ -28,9 +28,9 @@ app.get(`/${url}/:id`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.fetchDetails({ id })
+    await Validator.fetchOne({ id })
 
-    const data = await Ops.fetchDetails({ id })
+    const data = await Ops.fetchOne({ id })
 
     return res.send(data)
   } catch (error) {
@@ -48,7 +48,7 @@ app.post(`/${url}`, async (req, res, next) => {
 
     const data = await Ops.create({ branch, type, name, path, location, isFolder, interbranch })
 
-    res.io.sockets.emit(socketLink, { action: 'add', data })
+    // res.io.sockets.emit(socketLink, { action: 'add', data })
     return res.send(data)
   } catch (error) {
     return next(error)

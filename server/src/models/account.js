@@ -30,6 +30,11 @@ const AccountSchema = new mongoose.Schema({
       type : String,
     },
   ],
+  isSystem: {
+    type     : Boolean,
+    default  : false,
+    required : true,
+  },
   isFolder    : {
     type     : Boolean,
     default  : false,
@@ -62,6 +67,7 @@ AccountSchema.methods.toJSON = function() {
     path,
     balance,
     interbranch,
+    isSystem,
     isFolder,
     isDisabled,
     transaction,
@@ -76,6 +82,7 @@ AccountSchema.methods.toJSON = function() {
     path,
     balance,
     interbranch,
+    isSystem,
     isFolder,
     isDisabled,
     transaction,
@@ -97,8 +104,8 @@ AccountSchema.statics.fetchInterBranch = id => Account.findOne({ _id: id, interb
 
 // CODE: Create
 
-AccountSchema.statics.create = ({ branch, type, name, code, path, isFolder, interbranch }) =>
-  Account({ branch, type, name, code, path, isFolder, interbranch }).save()
+AccountSchema.statics.create = ({ branch, type, name, code, path, isSystem, isFolder, interbranch }) =>
+  Account({ branch, type, name, code, path, isSystem, isFolder, interbranch }).save()
 
 // CODE: Modify
 

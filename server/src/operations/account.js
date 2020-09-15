@@ -7,7 +7,7 @@ import Hierarchy from '../models/hierarchy'
 const fetch = async ({ branch, nonempty } = {}) => {
   let account
 
-  if (nonempty) account = await Account.fetchNonEmpty(branch)
+  if (nonempty === 'true') account = await Account.fetchNonEmpty(branch)
   else account = await Account.fetch(branch)
 
   // const { balance } = await Branch.fetchOne(branch)
@@ -17,7 +17,7 @@ const fetch = async ({ branch, nonempty } = {}) => {
   return account
 }
 
-const fetchDetails = async ({ id }) => {
+const fetchOne = async ({ id }) => {
   const account = await Account.fetchOne(id)
 
   return account
@@ -25,13 +25,13 @@ const fetchDetails = async ({ id }) => {
 
 //  CODE: Create
 
-const create = async ({ branch, type, name, path, location, isFolder, interbranch } = {}) => {
+const create = async ({ branch, type, name, path, location, isSystem, isFolder, interbranch } = {}) => {
   //  Generate Account Code
   const { accountCount } = await Branch.fetchOne(branch)
 
   const code = codeGen(type, accountCount[type])
 
-  const newAccount = await Account.create({ branch, type, name, code, path, isFolder, interbranch })
+  const newAccount = await Account.create({ branch, type, name, code, path, isSystem, isFolder, interbranch })
 
   await Hierarchy.insert({ branch, type, location, accountId: newAccount.id })
 
@@ -99,4 +99,4 @@ const accountSorter = account => {
   return sortedAccount
 }
 
-export default { fetch, fetchDetails, create, modify, activate, deactivate, remove }
+export default { fetch, fetchOne, create, modify, activate, deactivate, remove }

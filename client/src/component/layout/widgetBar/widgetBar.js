@@ -1,37 +1,35 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const WidgetBar = ({ children, backgroundColor, size, offset }) => {
-  return (
-    <VerticalBar backgroundColor={backgroundColor} size={size} offset={offset}>
-      {children}
-    </VerticalBar>
-  )
+const WidgetBar = ({ children, size }) => {
+  return <WidgetBarStyled size={size}>{children}</WidgetBarStyled>
 }
 
 const WHeader = ({ children }) => {
-  return <Header>{children}</Header>
+  return <WHeaderStyled>{children}</WHeaderStyled>
 }
 const WMiddle = ({ children }) => {
-  return <Middle>{children}</Middle>
+  return <WMiddleStyled>{children}</WMiddleStyled>
 }
 const WFooter = ({ children }) => {
-  return <Footer>{children}</Footer>
+  return <WFooterStyled>{children}</WFooterStyled>
 }
 const Widget = ({ children, padding, justify }) => {
   return (
-    <Container padding={padding} justify={justify}>
+    <WidgetStyled padding={padding} justify={justify}>
       {children}
-    </Container>
+    </WidgetStyled>
   )
 }
 
-const VerticalBar = styled.aside`
-  background-color: ${({ backgroundColor }) => (backgroundColor ? backgroundColor : '#ffffff')};
+const WidgetBarStyled = styled.aside`
+  background-color: #e1e1e1;
 
-  width: ${({ size }) => (size ? size : '25vw')};
-  min-width: 20rem;
-  height: ${({ offset }) => `calc(100vh - ${offset})`};
+  width: ${({ size }) => (size ? size : '25rem')};
+  /* min-width: ${({ size }) => size && '24.2rem'}; */
+  /* max-width: ${({ size }) => (size ? size : '25rem')}; */
+  height: calc(100% - 1.8rem);
+
   /* padding-bottom: 4.6rem; */
 
   display: flex;
@@ -43,19 +41,20 @@ const VerticalBar = styled.aside`
   overflow-y: auto;
 `
 
-const Header = styled.div`
+const WHeaderStyled = styled.div`
   font-size: 80%;
   font-weight: bold;
   padding: 0.5rem 1rem;
   margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  background: #f3f3f3;
+  margin-bottom: 0rem;
+  color: #aaa;
+  background: #eee;
 
   &:first-child {
     margin-top: 0;
   }
 `
-const Middle = styled.div`
+const WMiddleStyled = styled.div`
   padding: ${({ padding }) => (padding ? padding : '0.5rem 1rem')};
   margin: auto 0;
 
@@ -63,11 +62,12 @@ const Middle = styled.div`
   justify-content: ${({ justify }) => (justify ? justify : 'center')};
 `
 
-const Footer = styled.div`
+const WFooterStyled = styled.div`
   background: #f1f1f1;
   position: sticky;
   bottom: 0;
   padding: 1rem;
+  padding-bottom: 0rem;
   margin-top: auto;
 
   display: flex;
@@ -75,11 +75,11 @@ const Footer = styled.div`
   border-top: 0.1rem solid #ccc;
 `
 
-const Container = styled.section`
+const WidgetStyled = styled.section`
   display: flex;
   flex-wrap: wrap;
   justify-content: ${({ justify }) => (justify ? justify : 'center')};
-  padding: ${({ padding }) => (padding ? padding : '0.5rem 1rem')};
+  padding: ${({ padding }) => (padding ? padding : '0.5rem')};
 `
 
 export { WidgetBar, WHeader, WMiddle, WFooter, Widget }
