@@ -17,7 +17,7 @@ const fetchOne = async ({ id }) => {
 
 const create = async ({ branch, type, name, path, isFolder, interbranch }) => {
   if (!Validator.isMongoId(branch)) throw 'Wrong branch ID'
-  if (!Validator.isAlphanumeric(name.split(' ').join(''))) throw 'Only letters and numbers are allowed for name'
+  // if (!Validator.isAlphanumeric(name.split(' ').join(''))) throw 'Only letters and numbers are allowed for name'
   if (!Validator.isBoolean(isFolder + '')) throw 'Folder must be boolean'
 
   if (type !== 'assets' && type !== 'liabilities' && type !== 'equities' && type !== 'expenses' && type !== 'incomes')

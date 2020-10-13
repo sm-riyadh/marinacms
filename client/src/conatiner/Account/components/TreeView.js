@@ -20,6 +20,7 @@ const TreeView = ({
 
     const id = account.id
     const name = account.name
+    const balance = account.balance
     const isFolder = account.isFolder
     const isSystem = account.isSystem
 
@@ -46,7 +47,7 @@ const TreeView = ({
             </Container>
           </td>
           <td style={{ maxWidth: '3rem' }} className='txtRight'>
-            0
+            <span>৳</span> {balance}
             {true && isFolder &&
             id === hoverOn && (
               <Button

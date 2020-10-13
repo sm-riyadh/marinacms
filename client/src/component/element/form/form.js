@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 
-const Form = ({ children, label }) => {
+const Form = ({ children, label, onSubmit }) => {
   return (
-    <FormStyle>
+    <FormStyle onSubmit={onSubmit}>
       <h3>{label}</h3>
       {children}
       {/* <Group>

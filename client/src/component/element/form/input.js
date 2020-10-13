@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components/macro'
 
-const Input = ({ label, type: initialType = 'text', white, icon, onChange, value = '' }) => {
+const Input = ({ label, type: initialType = 'text', white, icon, onChange, tabIndex, value = '' }) => {
   const [ isEmpty, setIsEmpty ] = useState(value === '')
   const [ isFocus, setIsFocus ] = useState(false)
   const [ type, setType ] = useState(initialType)
@@ -24,6 +24,7 @@ const Input = ({ label, type: initialType = 'text', white, icon, onChange, value
         isEmpty={isEmpty}
         icon={icon}
         isFocus={isFocus}
+        tabIndex={tabIndex}
       />
       <TextStyled isEmpty={isEmpty} icon={icon} isFocus={isFocus}>
         {label}

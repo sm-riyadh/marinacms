@@ -3,10 +3,11 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import ReactToPrint from 'react-to-print'
 import styled from 'styled-components'
+import dateFormat from 'dateformat'
 
 import 'react-dates/initialize'
 import 'react-dates/lib/css/_datepicker.css'
-import { DayPickerSingleDateController, DayPickerRangeController } from 'react-dates'
+import { DayPickerSingleDateController, DayPickerRangeController, SingleDatePicker } from 'react-dates'
 
 import { WHeader, WFooter, Widget } from '../../component/layout/widgetBar/widgetBar'
 import Modal from '../../component/layout/modal/modal'
@@ -16,7 +17,7 @@ import ToPrint from './ToPrint'
 import { journalAction, accountAction, settingsAction } from '../../store/actions'
 
 class JournalWidget extends Component {
-  componentDidMount() {}
+  sourceSelect = React.createRef()
 
   state = {
     modal_new_journal     : false,
@@ -27,6 +28,7 @@ class JournalWidget extends Component {
 
     focused_input         : 'startDate',
 
+    focusedInput : false,
     date                  : moment(),
     destination           : '',
     destination_note      : '',
@@ -123,7 +125,7 @@ class JournalWidget extends Component {
       }),
       () =>
         this.props.fetchJournalMore({
-          branch  : '5efdede059266615d82e2f24',
+          branch  : this.props.settings.selected_branch,
           page    : this.state.page,
           account : this.state.filter_account,
         })
@@ -135,7 +137,7 @@ class JournalWidget extends Component {
 
     this.props.createJournal({
       date        : this.state.date,
-      branch      : '5efdede059266615d82e2f24',
+      branch      : this.props.settings.selected_branch,
       credit      : this.state.source,
       credit_note : this.state.source_note,
       debit       : this.state.destination,
@@ -144,9 +146,19 @@ class JournalWidget extends Component {
       amount      : this.state.amount,
       comment     : this.state.comment,
     })
-    this.onChangeHandler('modal_new_journal', false)
+    this.props.fetchAccount({ branch: this.props.settings.selected_branch })
+    this.setState({
+      date                  : moment(),
+      destination           : '',
+      destination_note      : '',
+      source_note           : '',
+      description           : '',
+      amount                : '',
+      comment               : '',
+    })
+    // this.onChangeHandler('modal_new_journal', false)
     // this.props.fetchJournal({
-    //   branch     : '5efdede059266615d82e2f24',
+    //   branch     : this.props.settings.selected_branch,
     //   type       : filter_type,
     //   size       : 12,
     //   page       : 0,
@@ -166,7 +178,7 @@ class JournalWidget extends Component {
       end_date,
     } = this.props.settings
 
-    const { journal, account, status } = this.props
+    const { journal, shadow_journal, account, settings, branch, status } = this.props
 
     return (
       <Fragment>
@@ -409,20 +421,93 @@ class JournalWidget extends Component {
 
         {modal_new_journal && (
           <Modal noPadding modalClose={() => this.onChangeHandler('modal_new_journal', false)}>
-            <Form>
-              <Input
+            <Flex direction="row">
+            <Flex>
+            <Observer>
+              Cash: {account.find(e => e.id === branch.find(e => e.id === settings.selected_branch).cashAccount).balance}
+            </Observer>
+              <ShadowJournal>
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Destination</th>
+                      <th>Source</th>
+                      <th>Description</th>
+                      <th className='alignRight'>Amount</th>
+                      <th>Comment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {shadow_journal.map(({ date, credit, debit, description, amount, comment }) => (
+                    <tr>
+                      <td>
+                        <span title={dateFormat(date, 'ddd, dS mmm, yyyy, h:MM:ss TT')}>
+                          {new Date(date).getFullYear() === new Date().getFullYear() ? (
+                            dateFormat(date, 'dS mmm')
+                          ) : (
+                            dateFormat(date, 'dS mmm, yyyy')
+                          )}
+                        </span>
+                      </td>
+                      <td>
+                        {debit.name} <Note>{debit.note}</Note>
+                      </td>
+                      <td>
+                        {credit.name} <Note>{credit.note}</Note>
+                      </td>
+                      <td>
+                        {description}
+                      </td>
+                      <td className='alignRight'>{amount}</td>
+                      <td>{comment}</td>
+                    </tr>
+                  ))}
+                  </tbody>
+                </Table>
+              </ShadowJournal>
+            </Flex>
+            <Form onSubmit={this.onSubmit}>
+            {/* <DayPickerSingleDateController
+                date={this.state.date}
+                focused={true}
+                onDateChange={date => this.onChangeHandler('date', date)}
+                displayFormat='D MMM'
+                numberOfMonths={1}
+                small
+                noBorder
+                isOutsideRange={() => false}
+                transitionDuration={0}
+                initialVisibleMonth={() => end_date}
+                isDayHighlighted={date =>
+                  date.year() === moment().year() &&
+                  date.month() === moment().month() &&
+                  date.date() === moment().date()}
+                isDayBlocked={date =>
+                  date.year() > moment().year() ||
+                  (date.year() >= moment().year() && date.month() > moment().month()) ||
+                  (date.year() >= moment().year() &&
+                    date.month() >= moment().month() &&
+                    date.date() > moment().date())}
+                daySize={30}
+                firstDayOfWeek={6}
+                reopenPickerOnClearDates
+                hideKeyboardShortcutsPanel
+              /> */}
+              {/* <Input
                 type='text'
                 label='Date'
                 icon='date_range'
                 onChange={value => this.onChangeHandler('date', value)}
                 value={this.state.date}
-              />
+              /> */}
               <Grid gap='1rem' columns='1.8fr 1.2fr'>
                 <Select
                   label='Source'
                   icon='keyboard_tab'
+                  ref={ref => { this.sourceSelect = ref }}
                   onChange={value => this.onChangeHandler('source', value)}
-                  options={account.map(account => ({ value: account.id, label: account.name }))}
+                  options={account.filter(e => !e.isFolder).map(account => ({ value: account.id, label: `${account.name} : ${account.path}` }))}
                   value={this.state.source}
                 />
                 <Input
@@ -431,6 +516,7 @@ class JournalWidget extends Component {
                   icon='assignment'
                   onChange={value => this.onChangeHandler('source_note', value)}
                   value={this.state.source_note}
+                  tabIndex="-1"
                 />
               </Grid>
               <Grid gap='1rem' columns='1.8fr 1.2fr'>
@@ -438,7 +524,7 @@ class JournalWidget extends Component {
                   label='Destination'
                   icon='play_for_work'
                   onChange={value => this.onChangeHandler('destination', value)}
-                  options={account.map(account => ({ value: account.id, label: account.name }))}
+                  options={account.filter(e => !e.isFolder).map(account => ({ value: account.id, label: `${account.name} : ${account.path}` }))}
                   value={this.state.destination}
                 />
                 <Input
@@ -447,6 +533,7 @@ class JournalWidget extends Component {
                   icon='assignment'
                   onChange={value => this.onChangeHandler('destination_note', value)}
                   value={this.state.destination_note}
+                  tabIndex="-1"
                 />
               </Grid>
               <Input
@@ -455,7 +542,7 @@ class JournalWidget extends Component {
                 icon='notes'
                 onChange={value => this.onChangeHandler('description', value)}
                 value={this.state.description}
-              />
+                />
               <Input
                 type='number'
                 label='Amount'
@@ -472,11 +559,12 @@ class JournalWidget extends Component {
               />
               <Grid gap='1rem' columns='1fr 1fr'>
                 <Button icon='clear'>Clear</Button>
-                <Button icon='done' onClick={this.onSubmit}>
+                <Button icon='done' onClick={this.onSubmit} tabIndex="6">
                   Create
                 </Button>
               </Grid>
             </Form>
+            </Flex>
           </Modal>
         )}
       </Fragment>
@@ -493,10 +581,12 @@ const HiddenPrint = styled.div`
   }
 `
 
+const Observer = styled.div``
+const ShadowJournal = styled.div``
 const Flex = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: ${({direction}) => direction ? direction : "column"};
 `
 const FloatRight = styled.span`float: right;`
 
@@ -547,9 +637,11 @@ const Table = styled.table`
 
 const mapStateToProps = state => ({
   journal  : state.journal.journal,
+  shadow_journal  : state.journal.shadow_journal,
   settings : state.settings,
   account  : state.account.account,
   status   : state.branch.status,
+  branch   : state.branch.branch
   // settings : state.settings,
 })
 const mapDispatchToProps = dispatch => ({

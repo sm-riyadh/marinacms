@@ -5,6 +5,7 @@ import { SETTINGS } from '../constants'
 
 const initialState = {
   selected_branch    : '5f5fa2baae87662ac405baef',
+  selected_branch_cash_account: '',
   sidebar_collapse   : false,
   selected_branch    : '',
 

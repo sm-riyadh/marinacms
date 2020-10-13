@@ -5,6 +5,7 @@ import { JOURNAL } from '../constants'
 
 const initialState = {
   journal : [],
+  shadow_journal : [],
   input   : {
     date          : moment(),
     debit         : '',

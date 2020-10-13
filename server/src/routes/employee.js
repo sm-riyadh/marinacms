@@ -14,7 +14,7 @@ app.get(`/${url}`, async (req, res, next) => {
   try {
     const { branch } = req.query
 
-    await Validator.fetch({ branch })
+    // await Validator.fetch({ branch })
 
     const data = await Ops.fetch({ branch })
 
@@ -28,7 +28,7 @@ app.get(`/${url}/:id`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.fetchOne({ id })
+    // await Validator.fetchOne({ id })
 
     const data = await Ops.fetchOne({ id })
 
@@ -44,7 +44,7 @@ app.post(`/${url}`, async (req, res, next) => {
   try {
     const { branch, accountId, position, salary } = req.body
 
-    await Validator.create({ branch, accountId, position, salary })
+    // await Validator.create({ branch, accountId, position, salary })
 
     const data = await Ops.create({ branch, accountId, position, salary })
 
@@ -63,7 +63,7 @@ app.patch(`/${url}/:id`, async (req, res, next) => {
 
     const { position, salary } = req.body
 
-    await Validator.modify({ id, position, salary })
+    // await Validator.modify({ id, position, salary })
 
     const data = await Ops.modify({ id, position, salary })
 
@@ -80,7 +80,7 @@ app.delete(`/${url}/:id`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.remove({ id })
+    // await Validator.remove({ id })
 
     const data = await Ops.remove({ id })
 

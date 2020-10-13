@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 
-const Textarea = ({ label, onChange, value = '', icon }) => {
+const Textarea = ({ label, onChange, tabIndex, value = '', icon }) => {
   const [ isEmpty, setIsEmpty ] = useState(true)
   const [ isFocus, setIsFocus ] = useState(false)
 
@@ -19,6 +19,7 @@ const Textarea = ({ label, onChange, value = '', icon }) => {
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         icon={icon}
+        tabIndex={tabIndex}
       >
         {value}
       </TextareaStyled>

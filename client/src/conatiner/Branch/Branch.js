@@ -26,7 +26,7 @@ export class Branch extends Component {
           {branch.map(({ name }) => (
             <Section>
               <Card column isHoverible>
-                {name},
+                {name}
               </Card>
             </Section>
           ))}

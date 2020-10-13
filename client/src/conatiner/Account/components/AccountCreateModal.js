@@ -4,7 +4,7 @@ import { Button, Grid, Form, Input, Checkbox } from '../../../component/element'
 
 import Modal from '../../../component/layout/modal/modal'
 
-const AccountCreateModal = ({ isModalOpen, modalClose, createAccount, type, path, location, selectedBranch, ...props }) => {
+const AccountCreateModal = ({ isModalOpen, modalClose, fetchAccount, createAccount, type, path, location, selectedBranch, ...props }) => {
   const [ name, setName ] = useState('')
   const [ isFolder, setIsFolder ] = useState(false)
 
@@ -27,6 +27,7 @@ const AccountCreateModal = ({ isModalOpen, modalClose, createAccount, type, path
       location,
       isFolder,
     })
+    fetchAccount({branch   : selectedBranch})
     modalClose()
   }
 

@@ -95,16 +95,18 @@ const create = async ({ date, branch, credit, credit_note, debit, debit_note, de
     (assets(debitType) && equities(creditType)) ||
     (expenses(debitType) && liabilities(creditType))
   ) {
-    await Account.modifyBalance(branch, amount)
-    await Account.modifyBalance(branch, amount)
+    console.log('Lib -> Ass')
+    await Account.modifyBalance(credit, amount)
+    await Account.modifyBalance(debit, amount)
 
     await Branch.modifyBalance(branch, creditType, +amount)
     await Branch.modifyBalance(branch, debitType, +amount)
 
     // CAVEAT: Asset, Expenses --> Liabilities, Equities, Incomes
   } else if ((liabilities(debitType) && assets(creditType)) || (equities(debitType) && assets(creditType))) {
-    await Account.modifyBalance(branch, -amount)
-    await Account.modifyBalance(branch, -amount)
+    console.log('Ass -> Lib')
+    await Account.modifyBalance(credit, -amount)
+    await Account.modifyBalance(debit, -amount)
 
     await Branch.modifyBalance(branch, creditType, -amount)
     await Branch.modifyBalance(branch, debitType, -amount)
@@ -117,34 +119,37 @@ const create = async ({ date, branch, credit, credit_note, debit, debit_note, de
     (assets(debitType) && incomes(creditType)) ||
     (incomes(debitType) && assets(creditType))
   ) {
-    await Account.modifyBalance(branch, -amount)
-    await Account.modifyBalance(branch, +amount)
+    console.log('Ass -> Ass')
+    await Account.modifyBalance(credit, -amount)
+    await Account.modifyBalance(debit, +amount)
 
     await Branch.modifyBalance(branch, creditType, -amount)
     await Branch.modifyBalance(branch, debitType, +amount)
   }
 
   // NOTE: Checks for inter branch capability
-  // const BnterbranchAccount = await Account.BetchInterbranch(debit)
+  const interbranchAccount = await Account.fetchInterBranch(debit)
 
-  // if (BnterbranchAccount) {
-  //   const { to_branch, due, deposit } = BnterbranchAccount.interbranch
+  if (interbranchAccount) {
+    const { to_branch, due, deposit } = interbranchAccount.interbranch
 
-  //   const dueCreditAccout = await Account.fetchOne(due)
-  //   const dueDebitAccout = await Account.fetchOne(deposit)
+    const dueCreditAccout = await Account.fetchOne(due)
+    const dueDebitAccout = await Account.fetchOne(deposit)
 
-  //   const { id } = await Journal.create({
-  //     date,
-  //     branch      : to_branch,
-  //     credit      : dueCreditAccout,
-  //     debit       : dueDebitAccout,
-  //     description : `From: ${creditAccount.name}, to: ${debitAccount.name}`,
-  //     amount,
-  //   })
+    const { id } = await create({
+      date,
+      branch      : to_branch,
+      credit_note,
+      credit      : dueCreditAccout,
+      debit_note,
+      debit       : dueDebitAccout,
+      description : `From: ${creditAccount.name}, to: ${debitAccount.name}`,
+      amount,
+    })
 
-  //   await Account.addJournal(dueCreditAccout.id, id)
-  //   await Account.addJournal(dueDebitAccout.id, id)
-  // }
+    await Account.addJournal(dueCreditAccout.id, id)
+    await Account.addJournal(dueDebitAccout.id, id)
+  }
 
   return newJournal
 }

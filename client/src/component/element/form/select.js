@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, forwardRef } from 'react'
 import styled from 'styled-components/macro'
 
-const Select = ({ label, options, icon, white, onChange, noEmpty, value = '' }) => {
+const Select = forwardRef(({ label, options, icon, white, onChange, noEmpty, tabIndex, focused, value = '' }, ref) => {
   const [ isEmpty, setIsEmpty ] = useState(value === '')
   const [ isFocus, setIsFocus ] = useState(false)
 
@@ -17,6 +17,9 @@ const Select = ({ label, options, icon, white, onChange, noEmpty, value = '' }) 
         isEmpty={isEmpty}
         icon={icon}
         isFocus={isFocus}
+        tabIndex={tabIndex}
+        ref={ref}
+        focused
       >
         {!noEmpty && <option value='' />}
         {options.map(option => <option value={option.value}>{option.label}</option>)}
@@ -29,7 +32,7 @@ const Select = ({ label, options, icon, white, onChange, noEmpty, value = '' }) 
       </IconStyled>
     </LabelStyled>
   )
-}
+})
 
 const SelectStyled = styled.select`
   width: ${({ icon }) => (icon ? 'calc(100% - 3rem)' : '100%')};

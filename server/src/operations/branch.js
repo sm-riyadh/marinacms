@@ -19,10 +19,14 @@ const fetchOne = async ({ id }) => {
 
 // CODE: Create
 
-const create = async ({ name }) => {
-  const Bewbranch = await Branch.create({ name })
+const create = async ({ name, isPrimary = false }) => {
+  const allBrach = await Branch.fetch()
+  if (allBrach.length === 0) {
+    isPrimary = true
+  }
+  const newbranch = await Branch.create({ name, isPrimary })
 
-  const { id } = Bewbranch
+  const { id } = newbranch
   // Creates Pre-made Accounts
 
   await hierarchyOps.create({
@@ -30,20 +34,12 @@ const create = async ({ name }) => {
     hierarchy : {},
   })
 
-  const { id: checkableFolderId } = await accountOps.create({
-    branch   : id,
-    type     : 'assets',
-    name     : 'Checkable',
-    path     : [],
-    location : 'base',
-    isFolder : true,
-  })
   const { id: cashAccountId } = await accountOps.create({
     branch   : id,
     type     : 'assets',
     name     : 'Cash',
     path     : [ 'assets' ],
-    location : checkableFolderId,
+    location : 'base',
     isFolder : false,
   })
   const { id: bankFolderId } = await accountOps.create({
@@ -52,7 +48,7 @@ const create = async ({ name }) => {
     name     : 'Bank',
     isSystem : true,
     path     : [ 'checkable' ],
-    location : checkableFolderId,
+    location : 'base',
     isFolder : true,
   })
 
@@ -92,16 +88,17 @@ const create = async ({ name }) => {
   })
 
   await Branch.modify(id, {
+    cashAccount: cashAccountId,
     dueFromFolder : dueFromFolderId,
     dueToFolder   : dueToFolderId,
   })
 
-  await BnterbranchDueAccounts(id, name, cashAccountId, {
+  await interbranchDueAccounts(id, name, cashAccountId, {
     dueFromFolderId,
     dueToFolderId,
   })
 
-  return Bewbranch
+  return newbranch
 }
 
 // CODE: Modify
@@ -137,31 +134,29 @@ const remove = async ({ id }) => {
 
 /* -------------------------------- Utilities ------------------------------- */
 
-const BnterbranchDueAccounts = async (id, name, cashAccountId, dueFoldersIds) => {
+const interbranchDueAccounts = async (id, name, cashAccountId, {dueToFolderId, dueFromFolderId}) => {
   let companies = await Branch.find()
   companies = companies.filter(e => e.id != id)
 
   // HACK: Map is not waiting for await
 
-  for (let i = 0; i < companies.length; i++) {
-    const { dueFromFolder: remoteDueFromFolderId, dueToFolder: remoteDueToFolderId } = await Branch.fetchOne(
-      companies[i].id
-    )
+  for (const company of companies) {
+    const { dueFromFolder: remoteDueFromFolderId, dueToFolder: remoteDueToFolderId } = await Branch.fetchOne(company.id)
 
     const { id: localDueFromId } = await accountOps.create({
       branch   : id,
       type     : 'liabilities',
+      name     : company.name,
       path     : [ 'due from' ],
-      location : dueFoldersIds.dueToFolderId,
-      name     : companies[i].name,
+      location : dueFromFolderId,
     })
 
     const { id: remoteDueToId } = await accountOps.create({
-      branch      : companies[i].id,
+      branch      : company.id,
       type        : 'assets',
       name        : name,
-      location    : remoteDueToFolderId,
       path        : [ 'assets', 'due to' ],
+      location    : remoteDueToFolderId,
       interbranch : {
         to_branch : id,
         deposit   : cashAccountId,
@@ -170,21 +165,20 @@ const BnterbranchDueAccounts = async (id, name, cashAccountId, dueFoldersIds) =>
     })
 
     const { id: remoteDueFromId } = await accountOps.create({
-      branch   : companies[i].id,
+      branch   : company.id,
       name     : name,
       path     : [ 'due from' ],
       type     : 'liabilities',
       location : remoteDueFromFolderId,
     })
-
     const { id: localDueToId } = await accountOps.create({
       branch      : id,
       type        : 'assets',
-      name        : companies[i].name,
+      name        : company.name,
       path        : [ 'assets', 'due to' ],
-      location    : dueFoldersIds.dueFromFolderId,
+      location    : dueToFolderId,
       interbranch : {
-        to_branch : companies[i].id,
+        to_branch : company.id,
         deposit   : remoteDueFromId,
         due       : cashAccountId,
       },
@@ -192,8 +186,8 @@ const BnterbranchDueAccounts = async (id, name, cashAccountId, dueFoldersIds) =>
 
     // CAVEAT: Add corresponding accounts to Branch
 
-    await Branch.insertCorrespondingAccounts(companies[i].id, localDueFromId)
-    await Branch.insertCorrespondingAccounts(companies[i].id, localDueToId)
+    await Branch.insertCorrespondingAccounts(company.id, localDueFromId)
+    await Branch.insertCorrespondingAccounts(company.id, localDueToId)
     await Branch.insertCorrespondingAccounts(id, remoteDueFromId)
     await Branch.insertCorrespondingAccounts(id, remoteDueToId)
   }

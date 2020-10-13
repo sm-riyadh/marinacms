@@ -16,7 +16,7 @@ app.get(`/${url}`, async (req, res, next) => {
   try {
     const { branch, size, page, type, start_date, end_date } = req.query
 
-    await Validator.fetch({ branch, size, page, type, start_date, end_date })
+    // await Validator.fetch({ branch, size, page, type, start_date, end_date })
 
     const data = await Ops.fetch({ branch, size, page, type, start_date, end_date })
 
@@ -30,7 +30,7 @@ app.get(`/${url}/:id`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.fetchOne({ id })
+    // await Validator.fetchOne({ id })
 
     const data = await Ops.fetchOne({ id })
 
@@ -45,7 +45,7 @@ app.post(`/${url}`, async (req, res, next) => {
   try {
     const { date, branch, credit, credit_note, debit, debit_note, description, amount, comment } = req.body
 
-    await Validator.create({ date, branch, credit, credit_note, debit, debit_note, description, amount, comment })
+    // await Validator.create({ date, branch, credit, credit_note, debit, debit_note, description, amount, comment })
 
     const data = await Ops.create({
       date,
@@ -74,7 +74,7 @@ app.patch(`/${url}/:id`, async (req, res, next) => {
 
     const { date, credit_note, debit_note, description, comment } = req.body
 
-    await Validator.modify({ id, date, credit_note, debit_note, description, comment })
+    // await Validator.modify({ id, date, credit_note, debit_note, description, comment })
 
     const data = await Ops.modify({ id, date, credit_note, debit_note, description, comment })
 
@@ -89,7 +89,7 @@ app.patch(`/${url}/:id/activate`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.activate({ id })
+    // await Validator.activate({ id })
 
     const data = await Ops.activate({ id })
 
@@ -104,7 +104,7 @@ app.patch(`/${url}/:id/deactivate`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.deactivate({ id })
+    // await Validator.deactivate({ id })
 
     const data = await Ops.deactivate({ id })
 

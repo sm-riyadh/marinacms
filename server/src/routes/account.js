@@ -14,7 +14,7 @@ app.get(`/${url}`, async (req, res, next) => {
   try {
     const { branch, nonempty } = req.query
 
-    await Validator.fetch({ branch, nonempty })
+    // await Validator.fetch({ branch, nonempty })
 
     const data = await Ops.fetch({ branch, nonempty })
 
@@ -28,7 +28,7 @@ app.get(`/${url}/:id`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.fetchOne({ id })
+    // await Validator.fetchOne({ id })
 
     const data = await Ops.fetchOne({ id })
 
@@ -44,7 +44,7 @@ app.post(`/${url}`, async (req, res, next) => {
   try {
     const { branch, type, name, path, location, isFolder, interbranch } = req.body
 
-    await Validator.create({ branch, type, name, path, location, isFolder, interbranch })
+    // await Validator.create({ branch, type, name, path, location, isFolder, interbranch })
 
     const data = await Ops.create({ branch, type, name, path, location, isFolder, interbranch })
 
@@ -63,7 +63,7 @@ app.patch(`/${url}/:id`, async (req, res, next) => {
 
     const { name, path, interbranch } = req.body
 
-    await Validator.modify({ id, name, path, interbranch })
+    // await Validator.modify({ id, name, path, interbranch })
 
     const data = await Ops.modify({ id, name, path, interbranch })
 
@@ -78,7 +78,7 @@ app.patch(`/${url}/:id/activate`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.activate({ id })
+    // await Validator.activate({ id })
 
     const data = await Ops.activate({ id })
 
@@ -93,7 +93,7 @@ app.patch(`/${url}/:id/deactivate`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.deactivate({ id })
+    // await Validator.deactivate({ id })
 
     const data = await Ops.deactivate({ id })
 
@@ -110,7 +110,7 @@ app.delete(`/${url}/:id`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.remove({ id })
+    // await Validator.remove({ id })
 
     const data = await Ops.remove({ id })
 

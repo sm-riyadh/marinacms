@@ -3,18 +3,26 @@ import { connect } from 'react-redux'
 import dateFormat from 'dateformat'
 import styled from 'styled-components'
 
+import 'react-dates/initialize'
+import 'react-dates/lib/css/_datepicker.css'
+import { DayPickerSingleDateController, DayPickerRangeController, SingleDatePicker } from 'react-dates'
+
 import { journalAction } from '../../store/actions'
 
 import Card from '../../component/element/card/card'
 
 class Journal extends Component {
   componentDidMount() {}
+  state = {
+    date: ''
+  }
 
   render() {
     const { journal, status } = this.props
 
     return (
       <Fragment>
+
         Journal
         <Table>
           <thead>
@@ -23,12 +31,13 @@ class Journal extends Component {
               <th>Date</th>
               <th>Destination</th>
               <th>Source</th>
+              <th>Description</th>
               <th className='alignRight'>Amount</th>
               <th>Comment</th>
             </tr>
           </thead>
           <tbody>
-            {journal.map(({ serial, date, credit, debit, amount, comment }) => (
+            {journal.map(({ serial, date, credit, debit, description, amount, comment }) => (
               <tr>
                 <td>{serial !== 'NOT_SET' ? serial.toUpperCase() : '...'}</td>
                 <td>
@@ -41,10 +50,13 @@ class Journal extends Component {
                   </span>
                 </td>
                 <td>
+                  {debit.name} <Note>{debit.note}</Note>
+                </td>
+                <td>
                   {credit.name} <Note>{credit.note}</Note>
                 </td>
                 <td>
-                  {debit.name} <Note>{debit.note}</Note>
+                  {description}
                 </td>
                 <td className='alignRight'>{amount}</td>
                 <td>{comment}</td>

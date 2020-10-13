@@ -8,7 +8,10 @@ const BranchSchema = new mongoose.Schema({
     trim      : true,
     required  : true,
   },
-  dueFromFolder         : {
+  cashAccount: {
+    type : mongoose.Schema.ObjectId,
+  },
+  dueFromFolder           : {
     type : mongoose.Schema.ObjectId,
   },
   dueToFolder           : {
@@ -87,11 +90,12 @@ const BranchSchema = new mongoose.Schema({
 /* --------------------------------- PARSING --------------------------------- */
 
 BranchSchema.methods.toJSON = function() {
-  const { _id, name, balance, correspondingAccounts, accountCount, isPrimary, isDisabled } = this.toObject()
+  const { _id, name, balance, cashAccount, correspondingAccounts, accountCount, isPrimary, isDisabled } = this.toObject()
   return {
     id                    : _id,
     name,
     balance,
+    cashAccount,
     correspondingAccounts,
     accountCount,
     isPrimary,
@@ -109,7 +113,7 @@ BranchSchema.statics.fetch = payload => Branch.find({ ...payload })
 
 // CODE: Create
 
-BranchSchema.statics.create = ({ name }) => Branch({ name }).save()
+BranchSchema.statics.create = ({ name, isPrimary }) => Branch({ name, isPrimary }).save()
 
 // CODE: Modify
 

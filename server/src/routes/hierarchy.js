@@ -14,7 +14,7 @@ app.get(`/${url}`, async (req, res, next) => {
   try {
     const { branch } = req.query
 
-    await Validator.fetch({ branch })
+    // await Validator.fetch({ branch })
 
     const data = await Ops.fetch({ branch })
 
@@ -31,7 +31,7 @@ app.put(`/${url}/:id`, async (req, res, next) => {
     const { id } = req.params
     const { type, hierarchy } = req.body
 
-    await Validator.replace({ id, type, hierarchy })
+    // await Validator.replace({ id, type, hierarchy })
 
     const data = await Ops.replace({ id, type, hierarchy })
 
@@ -47,7 +47,7 @@ app.delete(`/${url}/:id`, async (req, res, next) => {
   try {
     const { id } = req.params
 
-    await Validator.remove({ id })
+    // await Validator.remove({ id })
 
     const data = await Ops.remove({ id })
 

@@ -56,7 +56,7 @@ export class Account extends Component {
 
   render() {
     const { modal_new_account } = this.state
-    const { account, hierarchy } = this.props
+    const { account, hierarchy, status_account, status_hierarchy } = this.props
 
     return (
       <Fragment>
@@ -82,7 +82,7 @@ export class Account extends Component {
               </tr>
             </thead>
             <tbody onMouseLeave={() => this.setState({ hover_on: '' })}>
-              {account.length !== 0 &&
+              {status_account.success && status_hierarchy.success && account.length !== 0 &&
               hierarchy.assets.base.length !== 0 && (
                 <TreeView
                   accountType='assets'
@@ -137,7 +137,7 @@ export class Account extends Component {
               </tr>
             </thead>
             <tbody onMouseLeave={() => this.setState({ hover_on: '' })}>
-              {account.length !== 0 &&
+              {status_account.success && status_hierarchy.success && account.length !== 0 &&
               hierarchy.liabilities.base.length !== 0 && (
                 <TreeView
                   accountType='liabilities'
@@ -191,7 +191,7 @@ export class Account extends Component {
               </tr>
             </thead>
             <tbody onMouseLeave={() => this.setState({ hover_on: '' })}>
-              {account.length !== 0 &&
+              {status_account.success && status_hierarchy.success && account.length !== 0 &&
               hierarchy.equities.base.length !== 0 && (
                 <TreeView
                   accountType='equities'
@@ -245,7 +245,7 @@ export class Account extends Component {
               </tr>
             </thead>
             <tbody onMouseLeave={() => this.setState({ hover_on: '' })}>
-              {account.length !== 0 &&
+              {status_account.success && status_hierarchy.success && account.length !== 0 &&
               hierarchy.expenses.base.length !== 0 && (
                 <TreeView
                   accountType='expenses'
@@ -299,7 +299,7 @@ export class Account extends Component {
               </tr>
             </thead>
             <tbody onMouseLeave={() => this.setState({ hover_on: '' })}>
-              {account.length !== 0 &&
+              {status_account.success && status_hierarchy.success && account.length !== 0 &&
               hierarchy.incomes.base.length !== 0 && (
                 <TreeView
                   accountType='incomes'
@@ -336,6 +336,7 @@ export class Account extends Component {
           modalClose={() => this.onChangeHandler('modal_new_account', false)}
           location={this.state.selected_location}
           createAccount={this.props.createAccount}
+          fetchAccount={this.props.fetchAccount}
           company='5ea95979dc97443198df4ddf'
           type={this.state.selected_type}
           path={this.state.selected_type}
@@ -415,7 +416,8 @@ const mapStateToProps = state => ({
   hierarchy : state.hierarchy.hierarchy,
   settings : state.settings,
   // settings : state.settings,
-  // status   : state.branch.status,
+  status_account   : state.account.status,
+  status_hierarchy   : state.hierarchy.status,
 })
 const mapDispatchToProps = dispatch => ({
   fetchAccount   : payload => dispatch(accountAction.send.fetch(payload)),

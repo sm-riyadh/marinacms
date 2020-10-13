@@ -17,6 +17,7 @@ import JournalWidget from '../Journal/Widget'
 import Employee from '../Employee/Employee'
 import Customer from '../Customer/Customer'
 import Bank from '../Bank/Bank'
+import BankWidget from '../Bank/Widget'
 import Account from '../Account/Account'
 import AccountWidget from '../Account/Widget'
 import Branch from '../Branch/Branch'
@@ -39,8 +40,9 @@ class Home extends Component {
       key  : 'selected_branch',
       data : branch,
     })
-    this.props.fetchHierarchy({ branch: this.props.settings.selected_branch })
+
     this.props.fetchAccount({ branch: this.props.settings.selected_branch })
+    this.props.fetchHierarchy({ branch: this.props.settings.selected_branch })
     this.props.fetchJournal({
       branch     : this.props.settings.selected_branch,
       type       : this.props.settings.filter_type,
@@ -53,6 +55,7 @@ class Home extends Component {
   render() {
     const { branch, modifySettings } = this.props
     const { selected_branch } = this.props.settings
+
     if (!this.state.isFetched && this.props.branch.length !== 0) {
       this.setState({ isFetched: true }, () => this.fetchData(this.props.branch.find(e => e.isPrimary).id))
     }
@@ -103,9 +106,9 @@ class Home extends Component {
               <Card>
                 <Switch>
                   <Route path='/journal' component={Journal} key={selected_branch} />
-                  <Route path='/employee' component={Employee} />
-                  <Route path='/customer' component={Customer} />
-                  <Route path='/bank' component={Bank} />
+                  <Route path='/employee' component={Employee} key={selected_branch} />
+                  <Route path='/customer' component={Customer} key={selected_branch} />
+                  <Route path='/bank' component={Bank} key={selected_branch} />
                   <Route path='/branch' component={Branch} />
                   <Route path='/coa' component={Account} key={selected_branch} />
                   <Route path='/ui' component={UserInterface} />
@@ -118,6 +121,7 @@ class Home extends Component {
             <Switch>
               <Route path='/journal' component={JournalWidget} key={selected_branch} />
               <Route path='/coa' component={AccountWidget} key={selected_branch} />
+              <Route path='/bank' component={BankWidget} />
               <Route path='/branch' component={BranchWidget} />
               {/* <Route path='/employee' component={EmployeeBranchWidget} /> */}
               {/* <Route path='/employee' component={Employee.Activity} />  */}

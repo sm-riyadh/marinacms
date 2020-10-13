@@ -2,11 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components/macro'
 
-const Button = ({ children, to, icon, onClick, style, chip, small, white, className }) => {
+const Button = ({ children, to, icon, onClick, style, chip, small, white, tabIndex, className }) => {
   if (to)
     return (
       <Link to={to}>
-        <ButtonStyled className={className} style={style} onClick={onClick} small={small} chip={chip}>
+        <ButtonStyled className={className} style={style} onClick={onClick} small={small} chip={chip} tabIndex={tabIndex}>
           {icon && <i className='material-icons p-right-1'>{icon}</i>}
           {children}
         </ButtonStyled>
@@ -14,7 +14,7 @@ const Button = ({ children, to, icon, onClick, style, chip, small, white, classN
     )
   else
     return (
-      <ButtonStyled className={className} style={style} onClick={onClick} small={small} chip={chip} white={white}>
+      <ButtonStyled className={className} style={style} onClick={onClick} small={small} chip={chip} white={white} tabIndex={tabIndex}>
         {icon && <i className='material-icons p-right-1'>{icon}</i>}
         {children}
       </ButtonStyled>

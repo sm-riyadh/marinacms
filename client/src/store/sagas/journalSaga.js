@@ -42,6 +42,7 @@ function* handleCreate({ payload = {} }) {
     const { data, error } = yield call(Api.create, [ url, { body } ])
 
     if (!error) {
+      yield put(addTop({ key: 'shadow_journal', data }))
       yield put(addTop({ key: 'journal', data }))
       yield put(success())
     } else throw error

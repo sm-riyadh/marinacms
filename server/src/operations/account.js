@@ -33,6 +33,7 @@ const create = async ({ branch, type, name, path, location, isSystem, isFolder, 
 
   const newAccount = await Account.create({ branch, type, name, code, path, isSystem, isFolder, interbranch })
 
+
   await Hierarchy.insert({ branch, type, location, accountId: newAccount.id })
 
   // Increase Account Count
