@@ -28,7 +28,7 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "dateformat": "^3.0.3",
     "electron-is-dev": "^1.2.0",
     "lodash.clonedeep": "^4.5.0",
