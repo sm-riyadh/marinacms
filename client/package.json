@@ -54,7 +54,7 @@
     "electron": "^10.1.1",
     "electron-builder": "^22.7.0",
     "foreman": "^3.0.1",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "react-scripts": "^3.4.3"
   },
   "build": {
