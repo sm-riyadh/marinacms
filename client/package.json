@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "csscomb": "^4.3.0",
-    "electron": "^10.1.1",
+    "electron": "^18.3.7",
     "electron-builder": "^22.7.0",
     "foreman": "^3.0.1",
     "node-sass": "^4.14.1",
